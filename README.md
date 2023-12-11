@@ -6,6 +6,14 @@ It is needed sometimes when you made a bulk file operation (copy / move / delete
 
 The usual workaround for this problem is to close and reopen `Obsidian` or invoke `Reload app without saving` command, but for big vaults such workarounds adds undesired waiting time, which the current plugin is aiming to avoid.
 
+The plugin adds `Reload File Explorer` command, `Reload Folder` and `Reload Folder with Subfolders` context menu items.
+
+Also you can use this plugin's functionality programmatically
+
+```js
+await app.plugins.plugins['file-explorer-reload'].reloadDirectory(directoryPath, isRecursive);
+```
+
 ## Installation
 
 - `File Explorer Reload` is not available on [the official Community Plugins repository](https://obsidian.md/plugins) yet.

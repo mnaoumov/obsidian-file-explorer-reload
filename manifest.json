@@ -1,7 +1,7 @@
 {
 	"id": "file-explorer-reload",
 	"name": "File Explorer Reload",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Reloads file explorer pane",
 	"author": "mnaoumov",

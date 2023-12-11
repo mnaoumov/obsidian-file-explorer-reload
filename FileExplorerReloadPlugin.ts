@@ -3,8 +3,10 @@ import {
     TFolder
 } from "obsidian";
 
+const ROOT_PATH = "/";
+
 export default class FileExplorerReloadPlugin extends Plugin {
-    public async onload(): Promise<void> {
+    public onload(): void {
         this.addCommand({
             id: "reload-file-explorer",
             name: "Reload File Explorer",
@@ -13,11 +15,11 @@ export default class FileExplorerReloadPlugin extends Plugin {
     }
 
     private async reloadFileExplorer(): Promise<void> {
-        await this.reloadDirectory("/");
+        await this.reloadDirectory(ROOT_PATH);
     }
 
     private async reloadDirectory(directoryPath: string): Promise<void> {
-        const isRoot = directoryPath === "/";
+        const isRoot = directoryPath === ROOT_PATH;
         const adapter = this.app.vault.adapter;
         console.debug(`Reloading directory ${directoryPath}`);
         await adapter.reconcileFolderCreation(directoryPath, directoryPath);
@@ -59,7 +61,7 @@ export default class FileExplorerReloadPlugin extends Plugin {
     }
 
     private combinePath(directoryPath: string, fileName: string): string {
-        const isRoot = directoryPath === "/";
+        const isRoot = directoryPath === ROOT_PATH;
         return isRoot ? fileName : `${directoryPath}/${fileName}`;
     }
 }

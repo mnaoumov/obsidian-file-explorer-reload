@@ -5,10 +5,20 @@ import {
     TFolder,
 } from "obsidian";
 
+import * as fsPromises from "fs/promises";
+
 const ROOT_PATH = "/";
 
 export default class FileExplorerReloadPlugin extends Plugin {
+    private _fsPromises!: typeof fsPromises;
+
     public onload(): void {
+        if (!this.app.vault.adapter.fsPromises) {
+            throw new Error("app.vault.adapter.fsPromises is not initialized");
+        }
+
+        this._fsPromises = this.app.vault.adapter.fsPromises;
+
         this.addCommand({
             id: "reload-file-explorer",
             name: "Reload File Explorer",
@@ -29,11 +39,7 @@ export default class FileExplorerReloadPlugin extends Plugin {
         await adapter.reconcileFolderCreation(directoryPath, directoryPath);
         const absolutePath = isRoot ? adapter.basePath : `${adapter.basePath}/${directoryPath}`;
 
-        if (!adapter.fsPromises) {
-            throw new Error("adapter.fsPromises is not initialized");
-        }
-
-        const existingFileItems = (await adapter.fsPromises.readdir(absolutePath, { withFileTypes: true }))
+        const existingFileItems = (await this._fsPromises.readdir(absolutePath, { withFileTypes: true }))
             .filter(f => !f.name.startsWith("."));
         const existingFileNames = new Set(existingFileItems.map(f => f.name));
 

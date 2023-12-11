@@ -32,7 +32,7 @@ export default class FileExplorerReloadPlugin extends Plugin {
         await this.reloadDirectory(ROOT_PATH, true);
     }
 
-    private async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
+    public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
         const isRoot = directoryPath === ROOT_PATH;
         const adapter = this.app.vault.adapter;
         console.debug(`Reloading directory ${directoryPath}`);

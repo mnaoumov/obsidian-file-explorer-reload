@@ -43,7 +43,12 @@ export default class FileExplorerReloadPlugin extends Plugin {
             .filter(f => !f.name.startsWith("."));
         const existingFileNames = new Set(existingFileItems.map(f => f.name));
 
-        const dir = this.app.vault.getAbstractFileByPath(directoryPath) as TFolder;
+        const dir = this.app.vault.getAbstractFileByPath(directoryPath);
+
+        if (!(dir instanceof TFolder)) {
+            throw new Error(`${directoryPath} is not a folder`);
+        }
+
         const obsidianFileNames = new Set(dir.children.map(child => child.name).filter(name => name));
 
         for (const fileName of existingFileNames) {

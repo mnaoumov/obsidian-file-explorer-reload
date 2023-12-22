@@ -33,6 +33,12 @@ export default class FileExplorerReloadPlugin extends Plugin {
     }
 
     public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
+        const dir = this.app.vault.getAbstractFileByPath(directoryPath);
+
+        if (!(dir instanceof TFolder)) {
+            throw new Error(`${directoryPath} is not a folder`);
+        }
+
         const isRoot = directoryPath === ROOT_PATH;
         const adapter = this.app.vault.adapter;
         console.debug(`Reloading directory ${directoryPath}`);
@@ -43,13 +49,7 @@ export default class FileExplorerReloadPlugin extends Plugin {
             .filter(f => !f.name.startsWith("."));
         const existingFileNames = new Set(existingFileItems.map(f => f.name));
 
-        const dir = this.app.vault.getAbstractFileByPath(directoryPath);
-
-        if (!(dir instanceof TFolder)) {
-            throw new Error(`${directoryPath} is not a folder`);
-        }
-
-        const obsidianFileNames = new Set(dir.children.map(child => child.name).filter(name => name));
+        const obsidianFileNames = new Set(dir.children.map(child => child.name));
 
         for (const fileName of existingFileNames) {
             if (!obsidianFileNames.has(fileName)) {

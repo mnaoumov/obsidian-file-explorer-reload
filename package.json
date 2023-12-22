@@ -1,6 +1,6 @@
 {
 	"name": "file-explorer-reload",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Reloads file explorer pane",
 	"main": "main.js",
 	"scripts": {

@@ -14,7 +14,7 @@ The plugin adds `Reload File Explorer` command, `Reload Folder` and `Reload Fold
 Also you can use this plugin's functionality programmatically
 
 ```js
-await app.plugins.plugins['file-explorer-reload'].reloadDirectory(directoryPath, isRecursive);
+await app.plugins.plugins["file-explorer-reload"].reloadDirectory(directoryPath, isRecursive);
 ```
 
 ## Installation

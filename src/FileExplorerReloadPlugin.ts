@@ -10,7 +10,7 @@ import { readdir } from "fs/promises";
 const ROOT_PATH = "/";
 
 export default class FileExplorerReloadPlugin extends Plugin {
-  public onload(): void {
+  public override onload(): void {
     if (!this.app.vault.adapter.fsPromises) {
       throw new Error("app.vault.adapter.fsPromises is not initialized");
     }

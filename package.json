@@ -1,6 +1,6 @@
 {
   "name": "file-explorer-reload",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Reloads file explorer pane",
   "scripts": {
     "build": "tsc --build && tsx esbuild.config.ts production",

@@ -1,1 +1,1 @@
-export { default } from "./FileExplorerReloadPlugin.ts";
+export { default } from './FileExplorerReloadPlugin.ts';

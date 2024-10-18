@@ -1,0 +1,12 @@
+{
+  "version": "0.2",
+  "ignorePaths": [
+    "dist"
+  ],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [],
+  "ignoreWords": [],
+  "import": [],
+  "enabled": true
+}

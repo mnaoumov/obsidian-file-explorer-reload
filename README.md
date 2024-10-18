@@ -28,4 +28,4 @@ await app.plugins.plugins["file-explorer-reload"].reloadDirectory(directoryPath,
 
 ## License
 
- © [Michael Naumov](https://github.com/mnaoumov/)
+© [Michael Naumov](https://github.com/mnaoumov/)

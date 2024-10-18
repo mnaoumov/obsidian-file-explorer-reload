@@ -1,27 +1,32 @@
 import {
+  FileSystemAdapter,
   Menu,
-  Plugin,
+  PluginSettingTab,
   TAbstractFile,
-  TFolder,
-} from "obsidian";
+  TFolder
+} from 'obsidian';
+import type { MaybePromise } from 'obsidian-dev-utils/Async';
+import { PluginBase } from 'obsidian-dev-utils/obsidian/Plugin/PluginBase';
 
-import { readdir } from "fs/promises";
+const ROOT_PATH = '/';
 
-const ROOT_PATH = "/";
+export default class FileExplorerReloadPlugin extends PluginBase<object> {
+  protected override createDefaultPluginSettings(): object {
+    return {};
+  }
 
-export default class FileExplorerReloadPlugin extends Plugin {
-  public override onload(): void {
-    if (!this.app.vault.adapter.fsPromises) {
-      throw new Error("app.vault.adapter.fsPromises is not initialized");
-    }
+  protected override createPluginSettingsTab(): PluginSettingTab | null {
+    return null;
+  }
 
+  protected override onloadComplete(): MaybePromise<void> {
     this.addCommand({
-      id: "reload-file-explorer",
-      name: "Reload File Explorer",
+      id: 'reload-file-explorer',
+      name: 'Reload File Explorer',
       callback: this.reloadFileExplorer.bind(this)
     });
 
-    this.registerEvent(this.app.workspace.on("file-menu", this.handleFileMenu.bind(this)));
+    this.registerEvent(this.app.workspace.on('file-menu', this.handleFileMenu.bind(this)));
   }
 
   private async reloadFileExplorer(): Promise<void> {
@@ -41,11 +46,13 @@ export default class FileExplorerReloadPlugin extends Plugin {
     await adapter.reconcileFolderCreation(directoryPath, directoryPath);
     const absolutePath = isRoot ? adapter.basePath : `${adapter.basePath}/${directoryPath}`;
 
-    const existingFileItems = (await readdir(absolutePath, { withFileTypes: true }))
-      .filter(f => !f.name.startsWith("."));
-    const existingFileNames = new Set(existingFileItems.map(f => f.name));
+    const readdir = (this.app.vault.adapter as FileSystemAdapter).fsPromises.readdir;
 
-    const obsidianFileNames = new Set(dir.children.map(child => child.name));
+    const existingFileItems = (await readdir(absolutePath, { withFileTypes: true }))
+      .filter((f) => !f.name.startsWith('.'));
+    const existingFileNames = new Set(existingFileItems.map((f) => f.name));
+
+    const obsidianFileNames = new Set(dir.children.map((child) => child.name));
 
     for (const fileName of existingFileNames) {
       if (!obsidianFileNames.has(fileName)) {
@@ -59,7 +66,7 @@ export default class FileExplorerReloadPlugin extends Plugin {
       if (!existingFileNames.has(fileName)) {
         const path = this.combinePath(directoryPath, fileName);
         console.debug(`Deleting inexistent ${path}`);
-        await adapter.reconcileFile("", path, false);
+        await adapter.reconcileFile('', path, false);
       }
     }
 
@@ -85,15 +92,15 @@ export default class FileExplorerReloadPlugin extends Plugin {
 
     menu.addItem((item) => {
       item
-        .setTitle("Reload Folder")
-        .setIcon("folder-sync")
+        .setTitle('Reload Folder')
+        .setIcon('folder-sync')
         .onClick(() => this.reloadDirectory(file.path, false));
     });
 
     menu.addItem((item) => {
       item
-        .setTitle("Reload Folder with Subfolders")
-        .setIcon("folder-sync")
+        .setTitle('Reload Folder with Subfolders')
+        .setIcon('folder-sync')
         .onClick(() => this.reloadDirectory(file.path, true));
     });
   }

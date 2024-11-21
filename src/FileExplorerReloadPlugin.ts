@@ -12,53 +12,6 @@ import { PluginBase } from 'obsidian-dev-utils/obsidian/Plugin/PluginBase';
 const ROOT_PATH = '/';
 
 export default class FileExplorerReloadPlugin extends PluginBase<object> {
-  protected override createDefaultPluginSettings(): object {
-    return {};
-  }
-
-  protected override createPluginSettingsTab(): null | PluginSettingTab {
-    return null;
-  }
-
-  protected override onloadComplete(): MaybePromise<void> {
-    this.addCommand({
-      callback: this.reloadFileExplorer.bind(this),
-      id: 'reload-file-explorer',
-      name: 'Reload File Explorer'
-    });
-
-    this.registerEvent(this.app.workspace.on('file-menu', this.handleFileMenu.bind(this)));
-  }
-
-  private combinePath(directoryPath: string, fileName: string): string {
-    const isRoot = directoryPath === ROOT_PATH;
-    return isRoot ? fileName : `${directoryPath}/${fileName}`;
-  }
-
-  private handleFileMenu(menu: Menu, file: TAbstractFile): void {
-    if (!(file instanceof TFolder)) {
-      return;
-    }
-
-    menu.addItem((item) => {
-      item
-        .setTitle('Reload Folder')
-        .setIcon('folder-sync')
-        .onClick(() => this.reloadDirectory(file.path, false));
-    });
-
-    menu.addItem((item) => {
-      item
-        .setTitle('Reload Folder with Subfolders')
-        .setIcon('folder-sync')
-        .onClick(() => this.reloadDirectory(file.path, true));
-    });
-  }
-
-  private async reloadFileExplorer(): Promise<void> {
-    await this.reloadDirectory(ROOT_PATH, true);
-  }
-
   public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
     const dir = this.app.vault.getAbstractFileByPath(directoryPath);
 
@@ -104,5 +57,52 @@ export default class FileExplorerReloadPlugin extends PluginBase<object> {
         }
       }
     }
+  }
+
+  protected override createDefaultPluginSettings(): object {
+    return {};
+  }
+
+  protected override createPluginSettingsTab(): null | PluginSettingTab {
+    return null;
+  }
+
+  protected override onloadComplete(): MaybePromise<void> {
+    this.addCommand({
+      callback: this.reloadFileExplorer.bind(this),
+      id: 'reload-file-explorer',
+      name: 'Reload File Explorer'
+    });
+
+    this.registerEvent(this.app.workspace.on('file-menu', this.handleFileMenu.bind(this)));
+  }
+
+  private combinePath(directoryPath: string, fileName: string): string {
+    const isRoot = directoryPath === ROOT_PATH;
+    return isRoot ? fileName : `${directoryPath}/${fileName}`;
+  }
+
+  private handleFileMenu(menu: Menu, file: TAbstractFile): void {
+    if (!(file instanceof TFolder)) {
+      return;
+    }
+
+    menu.addItem((item) => {
+      item
+        .setTitle('Reload Folder')
+        .setIcon('folder-sync')
+        .onClick(() => this.reloadDirectory(file.path, false));
+    });
+
+    menu.addItem((item) => {
+      item
+        .setTitle('Reload Folder with Subfolders')
+        .setIcon('folder-sync')
+        .onClick(() => this.reloadDirectory(file.path, true));
+    });
+  }
+
+  private async reloadFileExplorer(): Promise<void> {
+    await this.reloadDirectory(ROOT_PATH, true);
   }
 }

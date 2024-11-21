@@ -11,7 +11,7 @@ import { PluginBase } from 'obsidian-dev-utils/obsidian/Plugin/PluginBase';
 
 const ROOT_PATH = '/';
 
-export default class FileExplorerReloadPlugin extends PluginBase<object> {
+export class FileExplorerReloadPlugin extends PluginBase<object> {
   public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
     const dir = this.app.vault.getAbstractFileByPath(directoryPath);
 

@@ -1,14 +1,16 @@
 {
   "version": "0.2",
   "ignorePaths": [
-    "dist"
+    "dist",
+    "tsconfig.tsbuildinfo"
   ],
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
     "mnaoumov",
     "Naumov",
-    "Subfolders"
+    "Subfolders",
+    "tsbuildinfo"
   ],
   "ignoreWords": [],
   "import": [],

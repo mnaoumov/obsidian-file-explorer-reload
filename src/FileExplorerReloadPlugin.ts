@@ -7,11 +7,12 @@ import {
   TAbstractFile,
   TFolder
 } from 'obsidian';
+import { EmptySettings } from 'obsidian-dev-utils/obsidian/Plugin/EmptySettings';
 import { PluginBase } from 'obsidian-dev-utils/obsidian/Plugin/PluginBase';
 
 const ROOT_PATH = '/';
 
-export class FileExplorerReloadPlugin extends PluginBase<object> {
+export class FileExplorerReloadPlugin extends PluginBase {
   public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
     const dir = this.app.vault.getAbstractFileByPath(directoryPath);
 
@@ -59,8 +60,8 @@ export class FileExplorerReloadPlugin extends PluginBase<object> {
     }
   }
 
-  protected override createDefaultPluginSettings(): object {
-    return {};
+  protected override createPluginSettings(): EmptySettings {
+    return new EmptySettings();
   }
 
   protected override createPluginSettingsTab(): null | PluginSettingTab {

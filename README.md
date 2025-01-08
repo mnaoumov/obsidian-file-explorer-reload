@@ -20,7 +20,7 @@ await app.plugins.plugins["file-explorer-reload"].reloadDirectory(directoryPath,
 ## Installation
 
 - `File Explorer Reload` is not available on [the official Community Plugins repository](https://obsidian.md/plugins) yet.
-- Beta releases can be installed through [BRAT](https://github.com/TfTHacker/obsidian42-brat)
+- Beta releases can be installed through [BRAT](https://obsidian.md/plugins?id=obsidian42-brat).
 
 ## Support
 

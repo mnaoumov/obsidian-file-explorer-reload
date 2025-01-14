@@ -22,7 +22,7 @@ export class FileExplorerReloadPlugin extends PluginBase {
 
     const isRoot = directoryPath === ROOT_PATH;
     const adapter = this.app.vault.adapter;
-    console.debug(`Reloading directory ${directoryPath}`);
+    this.consoleDebug(`Reloading directory ${directoryPath}`);
     await adapter.reconcileFolderCreation(directoryPath, directoryPath);
     const absolutePath = isRoot ? adapter.basePath : `${adapter.basePath}/${directoryPath}`;
 
@@ -37,7 +37,7 @@ export class FileExplorerReloadPlugin extends PluginBase {
     for (const fileName of existingFileNames) {
       if (!obsidianFileNames.has(fileName)) {
         const path = this.combinePath(directoryPath, fileName);
-        console.debug(`Adding new file ${path}`);
+        this.consoleDebug(`Adding new file ${path}`);
         await adapter.reconcileFile(path, path, false);
       }
     }
@@ -45,7 +45,7 @@ export class FileExplorerReloadPlugin extends PluginBase {
     for (const fileName of obsidianFileNames) {
       if (!existingFileNames.has(fileName)) {
         const path = this.combinePath(directoryPath, fileName);
-        console.debug(`Deleting inexistent ${path}`);
+        this.consoleDebug(`Deleting inexistent ${path}`);
         await adapter.reconcileFile('', path, false);
       }
     }

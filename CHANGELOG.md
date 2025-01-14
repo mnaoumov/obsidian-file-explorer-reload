@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.9
+
+- https://github.com/mnaoumov/obsidian-dev-utils/releases/tag/13.9.0
+
 ## 1.2.8
 
 - Update libs

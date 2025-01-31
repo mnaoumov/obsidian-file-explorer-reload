@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.13
+
+- https://github.com/mnaoumov/obsidian-dev-utils/releases/tag/17.2.2
+
 ## 1.2.12
 
 - Format

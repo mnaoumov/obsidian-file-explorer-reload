@@ -5,7 +5,7 @@ This is a plugin for [Obsidian](https://obsidian.md/) that reloads the file expl
 It is needed sometimes when you made a bulk file operation (copy / move / delete) outside of `Obsidian` while it is open and some of those changes aren't reflected in the `File Explorer` pane. So you might see in the `File Explorer` some files that don't actually exist in the file system, or the opposite, you might miss some files that actually exist in the file system.
 
 - [Video of the issue](https://www.youtube.com/watch?v=C-uKULzPNX4).
-- Discussion on the [Official Obsidian forum](https://forum.obsidian.md/t/sometimes-changes-made-outside-of-obsidian-are-not-reflected-in-the-files-pane/73451).
+- Discussion on the [Official Obsidian forum].
 
 The usual workaround for this problem is to close and reopen `Obsidian` or invoke `Reload app without saving` command, but for big vaults such workarounds adds undesired waiting time, which the current plugin is aiming to avoid.
 
@@ -23,6 +23,8 @@ await app.plugins.plugins['file-explorer-reload'].reloadDirectory(
 ## Installation
 
 - The plugin is not available on [the official Community Plugins repository](https://obsidian.md/plugins) yet.
+  - The Obsidian team [decided](https://github.com/obsidianmd/obsidian-releases/pull/2783#issuecomment-1936153306) to not accept this plugin to the repository.
+  - If you want to bring Obsidian team's attention to the problem solved by this plugin, you can leave a comment in the [Official Obsidian forum].
 - [Beta releases](obsidian://brat?plugin=https://github.com/mnaoumov/obsidian-file-explorer-reload) can be installed via [BRAT](https://obsidian.md/plugins?id=obsidian42-brat).
 
 ## Debugging
@@ -44,3 +46,5 @@ For more details, refer to the [documentation](https://github.com/mnaoumov/obsid
 ## License
 
 © [Michael Naumov](https://github.com/mnaoumov/)
+
+[Official Obsidian forum]: https://forum.obsidian.md/t/sometimes-changes-made-outside-of-obsidian-are-not-reflected-in-the-files-pane/73451

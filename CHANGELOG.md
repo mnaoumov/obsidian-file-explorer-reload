@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.15
+
+- https://github.com/mnaoumov/obsidian-dev-utils/releases/tag/19.2.1
+
 ## 1.2.14
 
 - Update template

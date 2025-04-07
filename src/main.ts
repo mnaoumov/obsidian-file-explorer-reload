@@ -1,4 +1,4 @@
-import { FileExplorerReloadPlugin } from './FileExplorerReloadPlugin.ts';
+import { Plugin } from './Plugin.ts';
 
 // eslint-disable-next-line import-x/no-default-export
-export default FileExplorerReloadPlugin;
+export default Plugin;

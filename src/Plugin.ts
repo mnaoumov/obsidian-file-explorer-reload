@@ -1,18 +1,16 @@
-import type { MaybePromise } from 'obsidian-dev-utils/Async';
-
 import {
   FileSystemAdapter,
   Menu,
-  PluginSettingTab,
   TAbstractFile,
   TFolder
 } from 'obsidian';
-import { EmptySettings } from 'obsidian-dev-utils/obsidian/Plugin/EmptySettings';
 import { PluginBase } from 'obsidian-dev-utils/obsidian/Plugin/PluginBase';
+
+import type { PluginTypes } from './PluginTypes.ts';
 
 const ROOT_PATH = '/';
 
-export class FileExplorerReloadPlugin extends PluginBase {
+export class Plugin extends PluginBase<PluginTypes> {
   public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
     const dir = this.app.vault.getAbstractFileByPath(directoryPath);
 
@@ -60,15 +58,8 @@ export class FileExplorerReloadPlugin extends PluginBase {
     }
   }
 
-  protected override createPluginSettings(): EmptySettings {
-    return new EmptySettings();
-  }
-
-  protected override createPluginSettingsTab(): null | PluginSettingTab {
-    return null;
-  }
-
-  protected override onloadComplete(): MaybePromise<void> {
+  protected override async onloadImpl(): Promise<void> {
+    await super.onloadImpl();
     this.addCommand({
       callback: this.reloadFileExplorer.bind(this),
       id: 'reload-file-explorer',

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.24
+
+- Update libs
+
 ## 1.2.23
 
 - Update libs

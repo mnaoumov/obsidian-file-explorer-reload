@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.35
+
+- fix: build
+- chore: update libs
+
 ## 1.2.34
 
 - chore: enable conventional commits

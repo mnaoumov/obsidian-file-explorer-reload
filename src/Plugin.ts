@@ -63,7 +63,7 @@ export class Plugin extends PluginBase<PluginTypes> {
     this.addCommand({
       callback: this.reloadFileExplorer.bind(this),
       id: 'reload-file-explorer',
-      name: 'Reload File Explorer'
+      name: 'Reload file explorer'
     });
 
     this.registerEvent(this.app.workspace.on('file-menu', this.handleFileMenu.bind(this)));
@@ -81,14 +81,14 @@ export class Plugin extends PluginBase<PluginTypes> {
 
     menu.addItem((item) => {
       item
-        .setTitle('Reload Folder')
+        .setTitle('Reload folder')
         .setIcon('folder-sync')
         .onClick(() => this.reloadDirectory(file.path, false));
     });
 
     menu.addItem((item) => {
       item
-        .setTitle('Reload Folder with Subfolders')
+        .setTitle('Reload folder with subfolders')
         .setIcon('folder-sync')
         .onClick(() => this.reloadDirectory(file.path, true));
     });

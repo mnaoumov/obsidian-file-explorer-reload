@@ -1,6 +1,6 @@
 {
   "name": "file-explorer-reload",
-  "version": "1.2.36",
+  "version": "1.2.37",
   "description": "Reloads file explorer pane",
   "scripts": {
     "build": "obsidian-dev-utils build",

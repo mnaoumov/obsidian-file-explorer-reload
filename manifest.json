@@ -1,8 +1,8 @@
 {
   "id": "file-explorer-reload",
   "name": "File Explorer Reload",
-  "version": "1.2.37",
-  "minAppVersion": "1.10.3",
+  "version": "1.2.38",
+  "minAppVersion": "1.10.6",
   "description": "Reloads file explorer pane",
   "author": "mnaoumov",
   "authorUrl": "https://github.com/mnaoumov",

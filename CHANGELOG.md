@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.0
+
+- refactor: commands
+
 ## 1.2.39
 
 - chore: update libs

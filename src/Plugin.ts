@@ -1,17 +1,23 @@
 import {
   FileSystemAdapter,
-  Menu,
-  TAbstractFile,
   TFolder
 } from 'obsidian';
 import { PluginBase } from 'obsidian-dev-utils/obsidian/Plugin/PluginBase';
 
 import type { PluginTypes } from './PluginTypes.ts';
 
+import { ReloadFileExplorerCommand } from './Commands/ReloadFileExplorerCommand.ts';
+import { ReloadFolderCommand } from './Commands/ReloadFolderCommand.ts';
+import { ReloadFolderWithSubfoldersCommand } from './Commands/ReloadFolderWithSubfoldersCommand.ts';
+
 const ROOT_PATH = '/';
 
 export class Plugin extends PluginBase<PluginTypes> {
-  public async reloadDirectory(directoryPath: string, isRecursive: boolean): Promise<void> {
+  public async reloadFileExplorer(): Promise<void> {
+    await this.reloadFolder(ROOT_PATH, true);
+  }
+
+  public async reloadFolder(directoryPath: string, isRecursive: boolean): Promise<void> {
     const dir = this.app.vault.getAbstractFileByPath(directoryPath);
 
     if (!(dir instanceof TFolder)) {
@@ -52,7 +58,7 @@ export class Plugin extends PluginBase<PluginTypes> {
       for (const existingFileItem of existingFileItems) {
         if (existingFileItem.isDirectory()) {
           const path = this.combinePath(directoryPath, existingFileItem.name);
-          await this.reloadDirectory(path, true);
+          await this.reloadFolder(path, true);
         }
       }
     }
@@ -60,41 +66,13 @@ export class Plugin extends PluginBase<PluginTypes> {
 
   protected override async onloadImpl(): Promise<void> {
     await super.onloadImpl();
-    this.addCommand({
-      callback: this.reloadFileExplorer.bind(this),
-      id: 'reload-file-explorer',
-      name: 'Reload file explorer'
-    });
-
-    this.registerEvent(this.app.workspace.on('file-menu', this.handleFileMenu.bind(this)));
+    new ReloadFileExplorerCommand(this).register();
+    new ReloadFolderCommand(this).register();
+    new ReloadFolderWithSubfoldersCommand(this).register();
   }
 
   private combinePath(directoryPath: string, fileName: string): string {
     const isRoot = directoryPath === ROOT_PATH;
     return isRoot ? fileName : `${directoryPath}/${fileName}`;
-  }
-
-  private handleFileMenu(menu: Menu, file: TAbstractFile): void {
-    if (!(file instanceof TFolder)) {
-      return;
-    }
-
-    menu.addItem((item) => {
-      item
-        .setTitle('Reload folder')
-        .setIcon('folder-sync')
-        .onClick(() => this.reloadDirectory(file.path, false));
-    });
-
-    menu.addItem((item) => {
-      item
-        .setTitle('Reload folder with subfolders')
-        .setIcon('folder-sync')
-        .onClick(() => this.reloadDirectory(file.path, true));
-    });
-  }
-
-  private async reloadFileExplorer(): Promise<void> {
-    await this.reloadDirectory(ROOT_PATH, true);
   }
 }

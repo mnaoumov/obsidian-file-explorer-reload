@@ -1,5 +1,9 @@
 # File Explorer Reload
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/mnaoumov)
+[![GitHub release](https://img.shields.io/github/v/release/mnaoumov/obsidian-file-explorer-reload)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases)
+[![GitHub downloads](https://img.shields.io/github/downloads/mnaoumov/obsidian-file-explorer-reload/total)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases)
+
 This is a plugin for [Obsidian](https://obsidian.md/) that reloads the file explorer files list.
 
 It is needed sometimes when you made a bulk file operation (copy / move / delete) outside of `Obsidian` while it is open and some of those changes aren't reflected in the `File Explorer` pane. So you might see in the `File Explorer` some files that don't actually exist in the file system, or the opposite, you might miss some files that actually exist in the file system.
@@ -51,8 +55,14 @@ For more details, refer to the [documentation](https://github.com/mnaoumov/obsid
 ## Support
 
 <!-- markdownlint-disable MD033 -->
+
 <a href="https://www.buymeacoffee.com/mnaoumov" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" width="217"></a>
+
 <!-- markdownlint-enable MD033 -->
+
+## My other Obsidian resources
+
+[See my other Obsidian resources](https://github.com/mnaoumov/obsidian-resources).
 
 ## License
 

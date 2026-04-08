@@ -5,7 +5,7 @@ import {
   FolderCommandInvocationBase,
   FoldersCommandInvocationBase,
   SequentialFoldersCommandInvocationBase
-} from 'obsidian-dev-utils/obsidian/Commands/FolderCommandBase';
+} from 'obsidian-dev-utils/obsidian/commands/folder-command-base';
 
 import type { Plugin } from '../Plugin.ts';
 

@@ -3,6 +3,7 @@ import {
   TFolder
 } from 'obsidian';
 import { PluginBase } from 'obsidian-dev-utils/obsidian/plugin/plugin-base';
+import { getDataAdapterEx } from 'obsidian-typings/implementations';
 
 import type { PluginTypes } from './PluginTypes.ts';
 
@@ -25,7 +26,7 @@ export class Plugin extends PluginBase<PluginTypes> {
     }
 
     const isRoot = directoryPath === ROOT_PATH;
-    const adapter = this.app.vault.adapter;
+    const adapter = getDataAdapterEx(this.app);
     this.consoleDebug(`Reloading directory ${directoryPath}`);
     await adapter.reconcileFolderCreation(directoryPath, directoryPath);
     const absolutePath = isRoot ? adapter.basePath : `${adapter.basePath}/${directoryPath}`;

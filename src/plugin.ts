@@ -22,7 +22,6 @@ import { ReloadFolderCommandHandler } from './command-handlers/reload-folder-com
 import { ReloadFolderWithSubfoldersCommandHandler } from './command-handlers/reload-folder-with-subfolders-command-handler.ts';
 
 const ROOT_PATH = '/';
-const PLUGIN_NAME = 'file-explorer-reload';
 
 /**
  * Plugin that provides commands to reload the file explorer.
@@ -39,11 +38,11 @@ export class Plugin extends PluginBase {
     const reloadFileExplorer = this.reloadFileExplorer.bind(this);
     const reloadFolder = this.reloadFolder.bind(this);
     this.registerComponent({
-      component: new CommandHandlerComponent(this, new ReloadFileExplorerCommandHandler({ pluginName: PLUGIN_NAME, reloadFileExplorer }))
+      component: new CommandHandlerComponent(this, new ReloadFileExplorerCommandHandler({ pluginName: manifest.name, reloadFileExplorer }))
     });
-    this.registerComponent({ component: new CommandHandlerComponent(this, new ReloadFolderCommandHandler({ pluginName: PLUGIN_NAME, reloadFolder })) });
+    this.registerComponent({ component: new CommandHandlerComponent(this, new ReloadFolderCommandHandler({ pluginName: manifest.name, reloadFolder })) });
     this.registerComponent({
-      component: new CommandHandlerComponent(this, new ReloadFolderWithSubfoldersCommandHandler({ pluginName: PLUGIN_NAME, reloadFolder }))
+      component: new CommandHandlerComponent(this, new ReloadFolderWithSubfoldersCommandHandler({ pluginName: manifest.name, reloadFolder }))
     });
   }
 

@@ -27,3 +27,5 @@ dist
 /tsconfig.tsbuildinfo
 
 .claude/settings.local.json
+
+coverage

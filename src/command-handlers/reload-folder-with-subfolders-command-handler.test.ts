@@ -1,3 +1,4 @@
+import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
 import {
   beforeEach,
   describe,
@@ -6,24 +7,37 @@ import {
   vi
 } from 'vitest';
 
+import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
+
 interface MockCommandHandlerParams {
+  fileMenuSubmenuIcon: string;
   icon: string;
   id: string;
   name: string;
-  pluginName: string;
+  shouldAddCommandToSubmenu: boolean;
 }
 
 vi.mock('obsidian-dev-utils/obsidian/command-handlers/folder-command-handler', () => ({
   FolderCommandHandler: class {
+    public fileMenuSubmenuIcon: string;
     public icon: string;
     public id: string;
     public name: string;
-    protected pluginName: string;
+    public shouldAddCommandToSubmenu: boolean;
     public constructor(params: MockCommandHandlerParams) {
+      this.fileMenuSubmenuIcon = params.fileMenuSubmenuIcon;
       this.icon = params.icon;
       this.id = params.id;
       this.name = params.name;
-      this.pluginName = params.pluginName;
+      this.shouldAddCommandToSubmenu = params.shouldAddCommandToSubmenu;
+    }
+
+    protected shouldAddToFolderMenu(): boolean {
+      return false;
+    }
+
+    protected shouldAddToFoldersMenu(): boolean {
+      return false;
     }
   }
 }));
@@ -57,8 +71,9 @@ describe('ReloadFolderWithSubfoldersCommandHandler', () => {
     vi.clearAllMocks();
     mockReloadFolder = vi.fn<(path: string, isRecursive: boolean) => Promise<void>>().mockResolvedValue(undefined);
     handler = new ReloadFolderWithSubfoldersCommandHandler({
-      pluginName: 'file-explorer-reload',
-      reloadFolder: mockReloadFolder
+      fileExplorerReloader: strictProxy<FileExplorerReloader>({
+        reloadFolder: mockReloadFolder
+      })
     });
   });
 

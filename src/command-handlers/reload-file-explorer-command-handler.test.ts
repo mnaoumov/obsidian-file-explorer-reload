@@ -1,3 +1,4 @@
+import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
 import {
   beforeEach,
   describe,
@@ -6,11 +7,12 @@ import {
   vi
 } from 'vitest';
 
+import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
+
 interface MockCommandHandlerParams {
   icon: string;
   id: string;
   name: string;
-  pluginName: string;
 }
 
 vi.mock('obsidian-dev-utils/obsidian/command-handlers/global-command-handler', () => ({
@@ -18,12 +20,10 @@ vi.mock('obsidian-dev-utils/obsidian/command-handlers/global-command-handler', (
     public icon: string;
     public id: string;
     public name: string;
-    protected pluginName: string;
     public constructor(params: MockCommandHandlerParams) {
       this.icon = params.icon;
       this.id = params.id;
       this.name = params.name;
-      this.pluginName = params.pluginName;
     }
   }
 }));
@@ -51,8 +51,9 @@ describe('ReloadFileExplorerCommandHandler', () => {
     vi.clearAllMocks();
     mockReloadFileExplorer = vi.fn<() => Promise<void>>().mockResolvedValue(undefined);
     handler = new ReloadFileExplorerCommandHandler({
-      pluginName: 'file-explorer-reload',
-      reloadFileExplorer: mockReloadFileExplorer
+      fileExplorerReloader: strictProxy<FileExplorerReloader>({
+        reloadFileExplorer: mockReloadFileExplorer
+      })
     });
   });
 

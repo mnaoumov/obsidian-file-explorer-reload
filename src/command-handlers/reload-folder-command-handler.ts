@@ -5,12 +5,14 @@ import type {
 
 import { FolderCommandHandler } from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
 
+import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
+
 export interface ReloadFolderCommandHandlerParams {
-  readonly reloadFolder: (path: string, isRecursive: boolean) => Promise<void>;
+  readonly fileExplorerReloader: FileExplorerReloader;
 }
 
 export class ReloadFolderCommandHandler extends FolderCommandHandler {
-  private readonly reloadFolder: (path: string, isRecursive: boolean) => Promise<void>;
+  private readonly fileExplorerReloader: FileExplorerReloader;
 
   public constructor(params: ReloadFolderCommandHandlerParams) {
     super({
@@ -20,11 +22,11 @@ export class ReloadFolderCommandHandler extends FolderCommandHandler {
       name: 'Reload folder',
       shouldAddCommandToSubmenu: true
     });
-    this.reloadFolder = params.reloadFolder;
+    this.fileExplorerReloader = params.fileExplorerReloader;
   }
 
   protected override async executeFolder(folder: TFolder): Promise<void> {
-    await this.reloadFolder(folder.path, false);
+    await this.fileExplorerReloader.reloadFolder(folder.path, false);
   }
 
   protected override shouldAddToFolderMenu(folder: TFolder, source: string, leaf?: WorkspaceLeaf): boolean {

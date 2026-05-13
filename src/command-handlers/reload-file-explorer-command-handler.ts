@@ -1,11 +1,13 @@
 import { GlobalCommandHandler } from 'obsidian-dev-utils/obsidian/command-handlers/global-command-handler';
 
+import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
+
 export interface ReloadFileExplorerCommandHandlerParams {
-  readonly reloadFileExplorer: () => Promise<void>;
+  readonly fileExplorerReloader: FileExplorerReloader;
 }
 
 export class ReloadFileExplorerCommandHandler extends GlobalCommandHandler {
-  private readonly reloadFileExplorer: () => Promise<void>;
+  private readonly fileExplorerReloader: FileExplorerReloader;
 
   public constructor(params: ReloadFileExplorerCommandHandlerParams) {
     super({
@@ -13,10 +15,10 @@ export class ReloadFileExplorerCommandHandler extends GlobalCommandHandler {
       id: 'reload-file-explorer',
       name: 'Reload file explorer'
     });
-    this.reloadFileExplorer = params.reloadFileExplorer;
+    this.fileExplorerReloader = params.fileExplorerReloader;
   }
 
   protected override async execute(): Promise<void> {
-    await this.reloadFileExplorer();
+    await this.fileExplorerReloader.reloadFileExplorer();
   }
 }

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.2
+
+- chore: add attestation
+- fix: manifest
+- refactor: new template
+
 ## 1.3.1
 
 - chore: update template

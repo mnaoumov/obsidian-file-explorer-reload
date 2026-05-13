@@ -1,9 +1,3 @@
-/**
- * @file
- *
- * Tests for reload-folder-command-handler.ts.
- */
-
 import {
   beforeEach,
   describe,

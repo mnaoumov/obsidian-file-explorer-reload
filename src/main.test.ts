@@ -1,9 +1,3 @@
-/**
- * @file
- *
- * Tests for main.ts default export.
- */
-
 import {
   describe,
   expect,

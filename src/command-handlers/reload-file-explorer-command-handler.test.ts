@@ -1,9 +1,3 @@
-/**
- * @file
- *
- * Tests for reload-file-explorer-command-handler.ts.
- */
-
 import {
   beforeEach,
   describe,

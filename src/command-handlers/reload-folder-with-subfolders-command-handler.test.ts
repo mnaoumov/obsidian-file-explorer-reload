@@ -1,9 +1,3 @@
-/**
- * @file
- *
- * Tests for reload-folder-with-subfolders-command-handler.ts.
- */
-
 import {
   beforeEach,
   describe,

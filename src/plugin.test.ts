@@ -1,11 +1,3 @@
-/**
- * @file
- *
- * Tests for plugin.ts.
- */
-
-import type { RegisterComponentParams } from 'obsidian-dev-utils/obsidian/plugin/plugin';
-
 import {
   afterEach,
   beforeEach,
@@ -60,16 +52,10 @@ const PluginBaseMock = vi.hoisted(() =>
     public app: unknown;
     public consoleDebugComponent: MockConsoleDebugComponent = { debug: vi.fn() };
     public manifest: unknown;
-    private readonly registeredComponents: RegisterComponentParams[] = [];
 
     public constructor(app: unknown, manifest: unknown) {
       this.app = app;
       this.manifest = manifest;
-    }
-
-    public registerComponent(params: RegisterComponentParams): unknown {
-      this.registeredComponents.push(params);
-      return params.component;
     }
   }
 );

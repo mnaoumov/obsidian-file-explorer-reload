@@ -5,7 +5,7 @@ import {
   FileSystemAdapter,
   TFolder
 } from 'obsidian';
-import { getDataAdapterEx } from 'obsidian-typings/implementations';
+import { getDataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 
 const ROOT_PATH = '/';
 

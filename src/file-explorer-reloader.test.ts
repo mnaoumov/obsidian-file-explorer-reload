@@ -1,6 +1,6 @@
 import type { App } from 'obsidian';
 import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/plugin/components/console-debug-component';
-import type { DataAdapterEx } from 'obsidian-typings/implementations';
+import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 
 import { TFolder } from 'obsidian';
 import {
@@ -16,12 +16,12 @@ vi.mock('obsidian', () => ({
   TFolder: vi.fn()
 }));
 
-vi.mock('obsidian-typings/implementations', () => ({
+vi.mock('@obsidian-typings/obsidian-public-latest/implementations', () => ({
   getDataAdapterEx: vi.fn()
 }));
 
 // eslint-disable-next-line import-x/first, import-x/imports-first -- vi.mock must precede imports.
-import { getDataAdapterEx } from 'obsidian-typings/implementations';
+import { getDataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 
 // eslint-disable-next-line import-x/first, import-x/imports-first -- vi.mock must precede imports.
 import { FileExplorerReloader } from './file-explorer-reloader.ts';

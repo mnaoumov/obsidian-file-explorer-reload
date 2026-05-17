@@ -14,7 +14,7 @@ vi.mock('obsidian', () => ({
   TFolder: vi.fn()
 }));
 
-vi.mock('obsidian-typings/implementations', () => ({
+vi.mock('@obsidian-typings/obsidian-public-latest/implementations', () => ({
   getDataAdapterEx: vi.fn()
 }));
 

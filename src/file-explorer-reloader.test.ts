@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/plugin/components/console-debug-component';
+import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/components/console-debug-component';
 import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 
 import { TFolder } from 'obsidian';

@@ -39,7 +39,7 @@ export class Plugin extends PluginBase {
           })
         ],
         commandRegistrar: new PluginCommandRegistrar(this),
-        menuEventRegistrar: new AppMenuEventRegistrar(app, this),
+        menuEventRegistrar,
         pluginName: manifest.name
       })
     );

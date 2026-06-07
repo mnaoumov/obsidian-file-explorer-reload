@@ -19,6 +19,7 @@ vi.mock('obsidian-dev-utils/obsidian/plugin/plugin', () => ({
 }));
 
 vi.mock('obsidian', () => ({
+  Component: vi.fn(),
   FileSystemAdapter: vi.fn(),
   TFolder: vi.fn()
 }));
@@ -39,8 +40,8 @@ vi.mock('obsidian-dev-utils/obsidian/command-registrar', () => ({
   PluginCommandRegistrar: vi.fn()
 }));
 
-vi.mock('obsidian-dev-utils/obsidian/menu-event-registrar', () => ({
-  AppMenuEventRegistrar: vi.fn()
+vi.mock('obsidian-dev-utils/obsidian/components/menu-event-registrar-component', () => ({
+  MenuEventRegistrarComponent: vi.fn()
 }));
 
 vi.mock('obsidian-dev-utils/obsidian/command-handlers/global-command-handler', () => ({
@@ -66,6 +67,6 @@ describe('Plugin', () => {
     new Plugin(mockApp, mockManifest);
 
     expect(mockCommandHandlerComponent).toHaveBeenCalledOnce();
-    expect(mockAddChild).toHaveBeenCalledOnce();
+    expect(mockAddChild).toHaveBeenCalledTimes(2);
   });
 });

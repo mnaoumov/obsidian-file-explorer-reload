@@ -10,11 +10,11 @@ import {
 import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 
 interface MockCommandHandlerParams {
-  fileMenuSubmenuIcon: string;
-  icon: string;
-  id: string;
-  name: string;
-  shouldAddCommandToSubmenu: boolean;
+  readonly fileMenuSubmenuIcon: string;
+  readonly icon: string;
+  readonly id: string;
+  readonly name: string;
+  readonly shouldAddCommandToSubmenu: boolean;
 }
 
 vi.mock('obsidian-dev-utils/obsidian/command-handlers/folder-command-handler', () => ({
@@ -50,12 +50,12 @@ interface MockTFolder {
 }
 
 interface ReloadFolderCommandHandlerTestAccessor {
-  executeFolder: (folder: MockTFolder) => Promise<void>;
+  executeFolder(folder: MockTFolder): Promise<void>;
   icon: string;
   id: string;
   name: string;
-  shouldAddToFolderMenu: () => boolean;
-  shouldAddToFoldersMenu: () => boolean;
+  shouldAddToFolderMenu(): boolean;
+  shouldAddToFoldersMenu(): boolean;
 }
 
 function asTestAccessor(handler: ReloadFolderCommandHandler): ReloadFolderCommandHandlerTestAccessor {

@@ -7,14 +7,14 @@ import { FolderCommandHandler } from 'obsidian-dev-utils/obsidian/command-handle
 
 import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 
-export interface ReloadFolderWithSubfoldersCommandHandlerParams {
+export interface ReloadFolderWithSubfoldersCommandHandlerConstructorParams {
   readonly fileExplorerReloader: FileExplorerReloader;
 }
 
 export class ReloadFolderWithSubfoldersCommandHandler extends FolderCommandHandler {
   private readonly fileExplorerReloader: FileExplorerReloader;
 
-  public constructor(params: ReloadFolderWithSubfoldersCommandHandlerParams) {
+  public constructor(params: ReloadFolderWithSubfoldersCommandHandlerConstructorParams) {
     super({
       fileMenuSubmenuIcon: 'folder-sync',
       icon: 'folder-sync',

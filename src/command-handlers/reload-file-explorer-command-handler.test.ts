@@ -10,9 +10,9 @@ import {
 import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 
 interface MockCommandHandlerParams {
-  icon: string;
-  id: string;
-  name: string;
+  readonly icon: string;
+  readonly id: string;
+  readonly name: string;
 }
 
 vi.mock('obsidian-dev-utils/obsidian/command-handlers/global-command-handler', () => ({
@@ -32,7 +32,7 @@ vi.mock('obsidian-dev-utils/obsidian/command-handlers/global-command-handler', (
 import { ReloadFileExplorerCommandHandler } from './reload-file-explorer-command-handler.ts';
 
 interface ReloadFileExplorerCommandHandlerTestAccessor {
-  execute: () => Promise<void>;
+  execute(): Promise<void>;
   icon: string;
   id: string;
   name: string;

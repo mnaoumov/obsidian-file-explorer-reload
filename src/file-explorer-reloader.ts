@@ -1,11 +1,11 @@
 import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/components/console-debug-component';
 
+import { getDataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 import {
   App,
   FileSystemAdapter,
   TFolder
 } from 'obsidian';
-import { getDataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 
 const ROOT_PATH = '/';
 

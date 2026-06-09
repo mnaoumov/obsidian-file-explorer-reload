@@ -84,7 +84,7 @@ describe('FileExplorerReloader', () => {
     } as unknown as DataAdapterEx);
 
     // eslint-disable-next-line no-restricted-syntax -- Partial mock of ConsoleDebugComponent requires double assertion.
-    const mockConsoleDebugComponent = { debug: mockDebug } as unknown as ConsoleDebugComponent;
+    const mockConsoleDebugComponent = { consoleDebug: mockDebug } as unknown as ConsoleDebugComponent;
 
     reloader = new FileExplorerReloader({
       app: mockApp,

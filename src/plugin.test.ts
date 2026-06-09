@@ -14,7 +14,7 @@ const { mockAddChild, mockCommandHandlerComponent } = vi.hoisted(() => ({
 vi.mock('obsidian-dev-utils/obsidian/plugin/plugin', () => ({
   PluginBase: class {
     public addChild = mockAddChild;
-    public consoleDebugComponent = { debug: vi.fn() };
+    public consoleDebugComponent = { consoleDebug: vi.fn() };
   }
 }));
 

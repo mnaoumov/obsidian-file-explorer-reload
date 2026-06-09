@@ -36,7 +36,7 @@ export class FileExplorerReloader {
 
     const isRoot = directoryPath === ROOT_PATH;
     const adapter = getDataAdapterEx(this.app);
-    this.consoleDebugComponent.debug(`Reloading directory ${directoryPath}`);
+    this.consoleDebugComponent.consoleDebug(`Reloading directory ${directoryPath}`);
     await adapter.reconcileFolderCreation(directoryPath, directoryPath);
     const absolutePath = isRoot ? adapter.basePath : `${adapter.basePath}/${directoryPath}`;
 
@@ -51,7 +51,7 @@ export class FileExplorerReloader {
     for (const fileName of existingFileNames) {
       if (!obsidianFileNames.has(fileName)) {
         const path = combinePath(directoryPath, fileName);
-        this.consoleDebugComponent.debug(`Adding new file ${path}`);
+        this.consoleDebugComponent.consoleDebug(`Adding new file ${path}`);
         await adapter.reconcileFile(path, path, false);
       }
     }
@@ -59,7 +59,7 @@ export class FileExplorerReloader {
     for (const fileName of obsidianFileNames) {
       if (!existingFileNames.has(fileName)) {
         const path = combinePath(directoryPath, fileName);
-        this.consoleDebugComponent.debug(`Deleting inexistent ${path}`);
+        this.consoleDebugComponent.consoleDebug(`Deleting inexistent ${path}`);
         await adapter.reconcileFile('', path, false);
       }
     }

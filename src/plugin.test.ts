@@ -1,3 +1,11 @@
+import type { PluginManifest } from 'obsidian';
+import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/components/console-debug-component';
+
+import { castTo } from 'obsidian-dev-utils/object-utils';
+import { CommandHandlerComponent } from 'obsidian-dev-utils/obsidian/command-handlers/command-handler-component';
+import { MenuEventRegistrarComponent } from 'obsidian-dev-utils/obsidian/components/menu-event-registrar-component';
+import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
+import { App } from 'obsidian-test-mocks/obsidian';
 import {
   beforeEach,
   describe,
@@ -6,67 +14,31 @@ import {
   vi
 } from 'vitest';
 
-const { mockAddChild, mockCommandHandlerComponent } = vi.hoisted(() => ({
-  mockAddChild: vi.fn(),
-  mockCommandHandlerComponent: vi.fn()
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/plugin/plugin', () => ({
-  PluginBase: class {
-    public addChild = mockAddChild;
-    public consoleDebugComponent = { consoleDebug: vi.fn() };
-  }
-}));
-
-vi.mock('obsidian', () => ({
-  Component: vi.fn(),
-  FileSystemAdapter: vi.fn(),
-  TFolder: vi.fn()
-}));
-
-vi.mock('@obsidian-typings/obsidian-public-latest/implementations', () => ({
-  getDataAdapterEx: vi.fn()
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/command-handlers/command-handler-component', () => ({
-  CommandHandlerComponent: mockCommandHandlerComponent
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/active-file-provider', () => ({
-  AppActiveFileProvider: vi.fn()
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/command-registrar', () => ({
-  PluginCommandRegistrar: vi.fn()
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/components/menu-event-registrar-component', () => ({
-  MenuEventRegistrarComponent: vi.fn()
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/command-handlers/global-command-handler', () => ({
-  GlobalCommandHandler: vi.fn()
-}));
-
-vi.mock('obsidian-dev-utils/obsidian/command-handlers/folder-command-handler', () => ({
-  FolderCommandHandler: vi.fn()
-}));
-
-// eslint-disable-next-line import-x/first, import-x/imports-first -- vi.mock must precede imports.
 import { Plugin } from './plugin.ts';
+
+interface PluginInternals {
+  _consoleDebugComponent: ConsoleDebugComponent;
+  onloadImpl(): void;
+}
 
 describe('Plugin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should create CommandHandlerComponent and add as child', () => {
-    const mockApp = {} as ConstructorParameters<typeof Plugin>[0];
-    const mockManifest = { name: 'File Explorer Reload' } as ConstructorParameters<typeof Plugin>[1];
+  it('should wire up the menu event registrar and command handler in onloadImpl', () => {
+    const app = App.createConfigured__().asOriginalType__();
+    const manifest = strictProxy<PluginManifest>({ name: 'File Explorer Reload' });
+    const plugin = new Plugin(app, manifest);
+    const internals = castTo<PluginInternals>(plugin);
+    internals._consoleDebugComponent = strictProxy<ConsoleDebugComponent>({ consoleDebug: vi.fn() });
+    const addChildSpy = vi.spyOn(plugin, 'addChild');
 
-    new Plugin(mockApp, mockManifest);
+    internals.onloadImpl();
 
-    expect(mockCommandHandlerComponent).toHaveBeenCalledOnce();
-    expect(mockAddChild).toHaveBeenCalledTimes(2);
+    const EXPECTED_ADD_CHILD_CALLS = 2;
+    expect(addChildSpy).toHaveBeenCalledTimes(EXPECTED_ADD_CHILD_CALLS);
+    expect(addChildSpy.mock.calls[0]?.[0]).toBeInstanceOf(MenuEventRegistrarComponent);
+    expect(addChildSpy.mock.calls[1]?.[0]).toBeInstanceOf(CommandHandlerComponent);
   });
 });

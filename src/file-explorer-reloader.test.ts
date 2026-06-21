@@ -1,6 +1,7 @@
 import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 import type {
   App as AppOriginal,
+  FileSystemAdapter,
   TFolder
 } from 'obsidian';
 import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/components/console-debug-component';
@@ -61,11 +62,11 @@ describe('FileExplorerReloader', () => {
 
     const mockApp = strictProxy<AppOriginal>({
       vault: {
-        adapter: {
-          fsPromises: {
-            readdir: mockReaddir
-          }
-        },
+        adapter: strictProxy<FileSystemAdapter>({
+          fsPromises: strictProxy<FileSystemAdapter['fsPromises']>({
+            readdir: castTo<FileSystemAdapter['fsPromises']['readdir']>(mockReaddir)
+          })
+        }),
         getAbstractFileByPath: mockGetAbstractFileByPath
       }
     });

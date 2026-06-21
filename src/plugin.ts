@@ -1,8 +1,3 @@
-import type {
-  App,
-  PluginManifest
-} from 'obsidian';
-
 import { AppActiveFileProvider } from 'obsidian-dev-utils/obsidian/active-file-provider';
 import { CommandHandlerComponent } from 'obsidian-dev-utils/obsidian/command-handlers/command-handler-component';
 import { PluginCommandRegistrar } from 'obsidian-dev-utils/obsidian/command-registrar';

@@ -15,18 +15,16 @@ import { ReloadFolderWithSubfoldersCommandHandler } from './command-handlers/rel
 import { FileExplorerReloader } from './file-explorer-reloader.ts';
 
 export class Plugin extends PluginBase {
-  public constructor(app: App, manifest: PluginManifest) {
-    super(app, manifest);
-
+  protected override onloadImpl(): void {
     const fileExplorerReloader = new FileExplorerReloader({
-      app,
+      app: this.app,
       consoleDebugComponent: this.consoleDebugComponent
     });
 
-    const menuEventRegistrar = this.addChild(new MenuEventRegistrarComponent(app));
+    const menuEventRegistrar = this.addChild(new MenuEventRegistrarComponent(this.app));
     this.addChild(
       new CommandHandlerComponent({
-        activeFileProvider: new AppActiveFileProvider(app),
+        activeFileProvider: new AppActiveFileProvider(this.app),
         commandHandlers: [
           new ReloadFileExplorerCommandHandler({
             fileExplorerReloader
@@ -40,7 +38,7 @@ export class Plugin extends PluginBase {
         ],
         commandRegistrar: new PluginCommandRegistrar(this),
         menuEventRegistrar,
-        pluginName: manifest.name
+        pluginName: this.manifest.name
       })
     );
   }

@@ -1,8 +1,13 @@
 import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
-import type { App } from 'obsidian';
+import type {
+  App as AppOriginal,
+  TFolder
+} from 'obsidian';
 import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/components/console-debug-component';
 
-import { TFolder } from 'obsidian';
+import { castTo } from 'obsidian-dev-utils/object-utils';
+import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
+import { App } from 'obsidian-test-mocks/obsidian';
 import {
   beforeEach,
   describe,
@@ -10,11 +15,6 @@ import {
   it,
   vi
 } from 'vitest';
-
-vi.mock('obsidian', () => ({
-  FileSystemAdapter: vi.fn(),
-  TFolder: vi.fn()
-}));
 
 vi.mock('@obsidian-typings/obsidian-public-latest/implementations', () => ({
   getDataAdapterEx: vi.fn()
@@ -42,19 +42,13 @@ function createMockDirent(name: string, isDir: boolean): MockDirent {
   };
 }
 
-function createMockFolder(children: MockChild[]): TFolder {
-  const folder = new TFolder();
-  Object.defineProperty(folder, 'children', { value: children });
-  return folder;
-}
-
 describe('FileExplorerReloader', () => {
   let mockDebug: ReturnType<typeof vi.fn<(message: string, ...args: unknown[]) => void>>;
   let mockReaddir: ReturnType<typeof vi.fn>;
   let mockReconcileFile: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFile']>>;
   let mockReconcileFolderCreation: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFolderCreation']>>;
   let reloader: FileExplorerReloader;
-  let mockGetAbstractFileByPath: ReturnType<typeof vi.fn<App['vault']['getAbstractFileByPath']>>;
+  let mockGetAbstractFileByPath: ReturnType<typeof vi.fn<AppOriginal['vault']['getAbstractFileByPath']>>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -63,37 +57,43 @@ describe('FileExplorerReloader', () => {
     mockReaddir = vi.fn();
     mockReconcileFile = vi.fn<DataAdapterEx['reconcileFile']>().mockResolvedValue(undefined);
     mockReconcileFolderCreation = vi.fn<DataAdapterEx['reconcileFolderCreation']>().mockResolvedValue(undefined);
+    mockGetAbstractFileByPath = vi.fn();
 
-    // eslint-disable-next-line no-restricted-syntax -- Deep mock of App requires double assertion.
-    const mockApp = {
+    const mockApp = strictProxy<AppOriginal>({
       vault: {
         adapter: {
           fsPromises: {
             readdir: mockReaddir
           }
         },
-        getAbstractFileByPath: mockGetAbstractFileByPath = vi.fn()
+        getAbstractFileByPath: mockGetAbstractFileByPath
       }
-    } as unknown as App;
+    });
 
-    // eslint-disable-next-line no-restricted-syntax -- Partial mock of DataAdapterEx requires double assertion.
-    vi.mocked(getDataAdapterEx).mockReturnValue({
+    vi.mocked(getDataAdapterEx).mockReturnValue(strictProxy<DataAdapterEx>({
       basePath: '/vault',
       reconcileFile: mockReconcileFile,
       reconcileFolderCreation: mockReconcileFolderCreation
-    } as unknown as DataAdapterEx);
-
-    // eslint-disable-next-line no-restricted-syntax -- Partial mock of ConsoleDebugComponent requires double assertion.
-    const mockConsoleDebugComponent = { consoleDebug: mockDebug } as unknown as ConsoleDebugComponent;
+    }));
 
     reloader = new FileExplorerReloader({
       app: mockApp,
-      consoleDebugComponent: mockConsoleDebugComponent
+      consoleDebugComponent: strictProxy<ConsoleDebugComponent>({ consoleDebug: mockDebug })
     });
   });
 
-  function setupFolder(_path: string, children: MockChild[]): void {
-    mockGetAbstractFileByPath.mockReturnValue(createMockFolder(children));
+  function createFolder(path: string, children: MockChild[]): TFolder {
+    // Mint a real obsidian-test-mocks TFolder (so the source's `instanceof TFolder` check passes) and seed its children.
+    const app = App.createConfigured__();
+    const folder = app.vault.createFolderSync__(path);
+    for (const child of children) {
+      app.vault.createSync__(path === '/' ? child.name : `${path}/${child.name}`, '');
+    }
+    return castTo<TFolder>(folder.asOriginalType2__());
+  }
+
+  function setupFolder(path: string, children: MockChild[]): void {
+    mockGetAbstractFileByPath.mockReturnValue(createFolder(path, children));
   }
 
   describe('reloadFileExplorer', () => {
@@ -180,8 +180,8 @@ describe('FileExplorerReloader', () => {
     });
 
     it('should recurse into subdirectories when isRecursive is true', async () => {
-      const subFolder = createMockFolder([]);
-      const rootFolder = createMockFolder([]);
+      const rootFolder = createFolder('docs', []);
+      const subFolder = createFolder('docs/subfolder', []);
 
       mockGetAbstractFileByPath
         .mockReturnValueOnce(rootFolder)

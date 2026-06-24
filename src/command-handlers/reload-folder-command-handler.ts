@@ -7,7 +7,7 @@ import { FolderCommandHandler } from 'obsidian-dev-utils/obsidian/command-handle
 
 import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 
-export interface ReloadFolderCommandHandlerConstructorParams {
+interface ReloadFolderCommandHandlerConstructorParams {
   readonly fileExplorerReloader: FileExplorerReloader;
 }
 

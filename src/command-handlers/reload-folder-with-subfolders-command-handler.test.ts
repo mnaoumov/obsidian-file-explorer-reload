@@ -39,9 +39,10 @@ describe('ReloadFolderWithSubfoldersCommandHandler', () => {
   });
 
   it('should set correct command properties', () => {
-    expect(handler.icon).toBe('folder-sync');
-    expect(handler.id).toBe('reload-folder-with-subfolders');
-    expect(handler.name).toBe('Reload folder with subfolders');
+    const command = handler.buildCommand();
+    expect(command.icon).toBe('folder-sync');
+    expect(command.id).toBe('reload-folder-with-subfolders');
+    expect(command.name).toBe('Reload folder with subfolders');
   });
 
   it('should call reloadFolder with isRecursive true on executeFolder', async () => {

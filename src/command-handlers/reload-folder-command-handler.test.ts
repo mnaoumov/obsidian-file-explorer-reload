@@ -39,9 +39,10 @@ describe('ReloadFolderCommandHandler', () => {
   });
 
   it('should set correct command properties', () => {
-    expect(handler.icon).toBe('folder-sync');
-    expect(handler.id).toBe('reload-folder');
-    expect(handler.name).toBe('Reload folder');
+    const command = handler.buildCommand();
+    expect(command.icon).toBe('folder-sync');
+    expect(command.id).toBe('reload-folder');
+    expect(command.name).toBe('Reload folder');
   });
 
   it('should call reloadFolder with isRecursive false on executeFolder', async () => {

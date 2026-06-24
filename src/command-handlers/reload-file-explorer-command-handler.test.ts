@@ -35,9 +35,10 @@ describe('ReloadFileExplorerCommandHandler', () => {
   });
 
   it('should set correct command properties', () => {
-    expect(handler.icon).toBe('refresh-ccw');
-    expect(handler.id).toBe('reload-file-explorer');
-    expect(handler.name).toBe('Reload file explorer');
+    const command = handler.buildCommand();
+    expect(command.icon).toBe('refresh-ccw');
+    expect(command.id).toBe('reload-file-explorer');
+    expect(command.name).toBe('Reload file explorer');
   });
 
   it('should call reloadFileExplorer on execute', async () => {

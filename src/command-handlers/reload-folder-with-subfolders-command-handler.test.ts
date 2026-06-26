@@ -1,4 +1,8 @@
 import type { TFolder } from 'obsidian';
+import type {
+  FolderCommandHandlerShouldAddToFolderMenuParams,
+  FolderCommandHandlerShouldAddToFoldersMenuParams
+} from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
 
 import { castTo } from 'obsidian-dev-utils/object-utils';
 import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
@@ -16,8 +20,8 @@ import { ReloadFolderWithSubfoldersCommandHandler } from './reload-folder-with-s
 
 interface ReloadFolderWithSubfoldersCommandHandlerTestAccessor {
   executeFolder(folder: TFolder): Promise<void>;
-  shouldAddToFolderMenu(folder: TFolder, source: string): boolean;
-  shouldAddToFoldersMenu(folders: TFolder[], source: string): boolean;
+  shouldAddToFolderMenu(params: FolderCommandHandlerShouldAddToFolderMenuParams): boolean;
+  shouldAddToFoldersMenu(params: FolderCommandHandlerShouldAddToFoldersMenuParams): boolean;
 }
 
 function asTestAccessor(handler: ReloadFolderWithSubfoldersCommandHandler): ReloadFolderWithSubfoldersCommandHandlerTestAccessor {
@@ -55,11 +59,11 @@ describe('ReloadFolderWithSubfoldersCommandHandler', () => {
 
   it('should add to folder menu', () => {
     const folder = strictProxy<TFolder>({ path: 'test-folder' });
-    expect(asTestAccessor(handler).shouldAddToFolderMenu(folder, 'file-explorer-context-menu')).toBe(true);
+    expect(asTestAccessor(handler).shouldAddToFolderMenu({ folder, source: 'file-explorer-context-menu' })).toBe(true);
   });
 
   it('should add to folders menu', () => {
     const folder = strictProxy<TFolder>({ path: 'test-folder' });
-    expect(asTestAccessor(handler).shouldAddToFoldersMenu([folder], 'file-explorer-context-menu')).toBe(true);
+    expect(asTestAccessor(handler).shouldAddToFoldersMenu({ folders: [folder], source: 'file-explorer-context-menu' })).toBe(true);
   });
 });

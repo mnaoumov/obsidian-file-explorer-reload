@@ -1,7 +1,8 @@
+import type { TFolder } from 'obsidian';
 import type {
-  TFolder,
-  WorkspaceLeaf
-} from 'obsidian';
+  FolderCommandHandlerShouldAddToFolderMenuParams,
+  FolderCommandHandlerShouldAddToFoldersMenuParams
+} from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
 
 import { FolderCommandHandler } from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
 
@@ -29,13 +30,15 @@ export class ReloadFolderWithSubfoldersCommandHandler extends FolderCommandHandl
     await this.fileExplorerReloader.reloadFolder(folder.path, true);
   }
 
-  protected override shouldAddToFolderMenu(folder: TFolder, source: string, leaf?: WorkspaceLeaf): boolean {
-    super.shouldAddToFolderMenu(folder, source, leaf);
+  // eslint-disable-next-line obsidian-dev-utils/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.
+  protected override shouldAddToFolderMenu(params: FolderCommandHandlerShouldAddToFolderMenuParams): boolean {
+    super.shouldAddToFolderMenu(params);
     return true;
   }
 
-  protected override shouldAddToFoldersMenu(folders: TFolder[], source: string, leaf?: WorkspaceLeaf): boolean {
-    super.shouldAddToFoldersMenu(folders, source, leaf);
+  // eslint-disable-next-line obsidian-dev-utils/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.
+  protected override shouldAddToFoldersMenu(params: FolderCommandHandlerShouldAddToFoldersMenuParams): boolean {
+    super.shouldAddToFoldersMenu(params);
     return true;
   }
 }

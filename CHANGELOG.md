@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.3.6
+
+- test: seed root-folder children on the live vault root
+- chore: update libs
+- chore: update obsidian-dev-utils to 85.0.0
+- refactor: pass params objects to FileExplorerReloader
+- build: lock typescript to 6.0.3
+- test: wire integration-testing vitest-setup into integration projects
+- chore: update libs
+- chore: sort tsconfig types
+
 ## 1.3.5
 
 - refactor: new template

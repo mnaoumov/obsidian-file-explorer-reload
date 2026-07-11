@@ -113,7 +113,7 @@ describe('FileExplorerReloader', () => {
     it('should throw if path is not a folder', async () => {
       mockGetAbstractFileByPath.mockReturnValue(null);
 
-      await expect(reloader.reloadFolder('nonexistent', false)).rejects.toThrow('nonexistent is not a folder');
+      await expect(reloader.reloadFolder({ directoryPath: 'nonexistent', isRecursive: false })).rejects.toThrow('nonexistent is not a folder');
     });
 
     it('should add new files not in Obsidian vault', async () => {
@@ -122,7 +122,7 @@ describe('FileExplorerReloader', () => {
         createMockDirent('new-file.md', false)
       ]);
 
-      await reloader.reloadFolder('docs', false);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
       expect(mockReconcileFile).toHaveBeenCalledWith('docs/new-file.md', 'docs/new-file.md', false);
       expect(mockDebug).toHaveBeenCalledWith('Adding new file docs/new-file.md');
@@ -132,7 +132,7 @@ describe('FileExplorerReloader', () => {
       setupFolder('docs', [{ name: 'deleted.md' }]);
       mockReaddir.mockResolvedValue([]);
 
-      await reloader.reloadFolder('docs', false);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
       expect(mockReconcileFile).toHaveBeenCalledWith('', 'docs/deleted.md', false);
       expect(mockDebug).toHaveBeenCalledWith('Deleting inexistent docs/deleted.md');
@@ -144,7 +144,7 @@ describe('FileExplorerReloader', () => {
         createMockDirent('existing.md', false)
       ]);
 
-      await reloader.reloadFolder('docs', false);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
       expect(mockReconcileFile).not.toHaveBeenCalled();
     });
@@ -156,7 +156,7 @@ describe('FileExplorerReloader', () => {
         createMockDirent('visible.md', false)
       ]);
 
-      await reloader.reloadFolder('docs', false);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
       expect(mockReconcileFile).toHaveBeenCalledOnce();
       expect(mockReconcileFile).toHaveBeenCalledWith('docs/visible.md', 'docs/visible.md', false);
@@ -166,7 +166,7 @@ describe('FileExplorerReloader', () => {
       setupFolder('/', []);
       mockReaddir.mockResolvedValue([]);
 
-      await reloader.reloadFolder('/', false);
+      await reloader.reloadFolder({ directoryPath: '/', isRecursive: false });
 
       expect(mockReaddir).toHaveBeenCalledWith('/vault', { withFileTypes: true });
     });
@@ -175,7 +175,7 @@ describe('FileExplorerReloader', () => {
       setupFolder('docs', []);
       mockReaddir.mockResolvedValue([]);
 
-      await reloader.reloadFolder('docs', false);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
       expect(mockReaddir).toHaveBeenCalledWith('/vault/docs', { withFileTypes: true });
     });
@@ -192,7 +192,7 @@ describe('FileExplorerReloader', () => {
         .mockResolvedValueOnce([createMockDirent('subfolder', true)])
         .mockResolvedValueOnce([]);
 
-      await reloader.reloadFolder('docs', true);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
 
       expect(mockReconcileFolderCreation).toHaveBeenCalledWith('docs', 'docs');
       expect(mockReconcileFolderCreation).toHaveBeenCalledWith('docs/subfolder', 'docs/subfolder');
@@ -202,7 +202,7 @@ describe('FileExplorerReloader', () => {
       setupFolder('docs', [{ name: 'file.md' }]);
       mockReaddir.mockResolvedValue([createMockDirent('file.md', false)]);
 
-      await reloader.reloadFolder('docs', true);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
 
       expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
     });
@@ -211,7 +211,7 @@ describe('FileExplorerReloader', () => {
       setupFolder('docs', []);
       mockReaddir.mockResolvedValue([createMockDirent('subfolder', true)]);
 
-      await reloader.reloadFolder('docs', false);
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
       expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
     });
@@ -222,7 +222,7 @@ describe('FileExplorerReloader', () => {
         createMockDirent('new.md', false)
       ]);
 
-      await reloader.reloadFolder('/', false);
+      await reloader.reloadFolder({ directoryPath: '/', isRecursive: false });
 
       expect(mockReconcileFile).toHaveBeenCalledWith('new.md', 'new.md', false);
       expect(mockReconcileFile).toHaveBeenCalledWith('', 'old.md', false);

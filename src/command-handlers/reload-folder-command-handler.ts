@@ -27,7 +27,7 @@ export class ReloadFolderCommandHandler extends FolderCommandHandler {
   }
 
   protected override async executeFolder(folder: TFolder): Promise<void> {
-    await this.fileExplorerReloader.reloadFolder(folder.path, false);
+    await this.fileExplorerReloader.reloadFolder({ directoryPath: folder.path, isRecursive: false });
   }
 
   // eslint-disable-next-line obsidian-dev-utils/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.

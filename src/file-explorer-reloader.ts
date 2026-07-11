@@ -9,9 +9,19 @@ import {
 
 const ROOT_PATH = '/';
 
+interface CombinePathParams {
+  readonly directoryPath: string;
+  readonly fileName: string;
+}
+
 interface FileExplorerReloaderConstructorParams {
   readonly app: App;
   readonly consoleDebugComponent: ConsoleDebugComponent;
+}
+
+interface FileExplorerReloaderReloadFolderParams {
+  readonly directoryPath: string;
+  readonly isRecursive: boolean;
 }
 
 export class FileExplorerReloader {
@@ -24,10 +34,11 @@ export class FileExplorerReloader {
   }
 
   public async reloadFileExplorer(): Promise<void> {
-    await this.reloadFolder(ROOT_PATH, true);
+    await this.reloadFolder({ directoryPath: ROOT_PATH, isRecursive: true });
   }
 
-  public async reloadFolder(directoryPath: string, isRecursive: boolean): Promise<void> {
+  public async reloadFolder(params: FileExplorerReloaderReloadFolderParams): Promise<void> {
+    const { directoryPath, isRecursive } = params;
     const dir = this.app.vault.getAbstractFileByPath(directoryPath);
 
     if (!(dir instanceof TFolder)) {
@@ -50,7 +61,7 @@ export class FileExplorerReloader {
 
     for (const fileName of existingFileNames) {
       if (!obsidianFileNames.has(fileName)) {
-        const path = combinePath(directoryPath, fileName);
+        const path = combinePath({ directoryPath, fileName });
         this.consoleDebugComponent.consoleDebug(`Adding new file ${path}`);
         await adapter.reconcileFile(path, path, false);
       }
@@ -58,7 +69,7 @@ export class FileExplorerReloader {
 
     for (const fileName of obsidianFileNames) {
       if (!existingFileNames.has(fileName)) {
-        const path = combinePath(directoryPath, fileName);
+        const path = combinePath({ directoryPath, fileName });
         this.consoleDebugComponent.consoleDebug(`Deleting inexistent ${path}`);
         await adapter.reconcileFile('', path, false);
       }
@@ -67,15 +78,16 @@ export class FileExplorerReloader {
     if (isRecursive) {
       for (const existingFileItem of existingFileItems) {
         if (existingFileItem.isDirectory()) {
-          const path = combinePath(directoryPath, existingFileItem.name);
-          await this.reloadFolder(path, true);
+          const path = combinePath({ directoryPath, fileName: existingFileItem.name });
+          await this.reloadFolder({ directoryPath: path, isRecursive: true });
         }
       }
     }
   }
 }
 
-function combinePath(directoryPath: string, fileName: string): string {
+function combinePath(params: CombinePathParams): string {
+  const { directoryPath, fileName } = params;
   const isRoot = directoryPath === ROOT_PATH;
   return isRoot ? fileName : `${directoryPath}/${fileName}`;
 }

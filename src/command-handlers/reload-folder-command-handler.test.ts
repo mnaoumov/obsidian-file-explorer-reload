@@ -30,11 +30,11 @@ function asTestAccessor(handler: ReloadFolderCommandHandler): ReloadFolderComman
 
 describe('ReloadFolderCommandHandler', () => {
   let handler: ReloadFolderCommandHandler;
-  let mockReloadFolder: ReturnType<typeof vi.fn<(path: string, isRecursive: boolean) => Promise<void>>>;
+  let mockReloadFolder: ReturnType<typeof vi.fn<FileExplorerReloader['reloadFolder']>>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockReloadFolder = vi.fn<(path: string, isRecursive: boolean) => Promise<void>>().mockResolvedValue(undefined);
+    mockReloadFolder = vi.fn<FileExplorerReloader['reloadFolder']>().mockResolvedValue(undefined);
     handler = new ReloadFolderCommandHandler({
       fileExplorerReloader: strictProxy<FileExplorerReloader>({
         reloadFolder: mockReloadFolder
@@ -54,7 +54,7 @@ describe('ReloadFolderCommandHandler', () => {
 
     await asTestAccessor(handler).executeFolder(folder);
 
-    expect(mockReloadFolder).toHaveBeenCalledWith('test-folder', false);
+    expect(mockReloadFolder).toHaveBeenCalledWith({ directoryPath: 'test-folder', isRecursive: false });
   });
 
   it('should add to folder menu', () => {

@@ -85,8 +85,9 @@ describe('FileExplorerReloader', () => {
 
   function createFolder(path: string, children: MockChild[]): TFolder {
     // Mint a real obsidian-test-mocks TFolder (so the source's `instanceof TFolder` check passes) and seed its children.
+    // The vault root ('/') already exists; createFolderSync__('/') returns a detached folder whose children never update, so use the live root.
     const app = App.createConfigured__();
-    const folder = app.vault.createFolderSync__(path);
+    const folder = path === '/' ? app.vault.getRoot() : app.vault.createFolderSync__(path);
     for (const child of children) {
       app.vault.createSync__(path === '/' ? child.name : `${path}/${child.name}`, '');
     }

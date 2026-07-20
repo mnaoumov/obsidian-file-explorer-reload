@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.3.7
+
+- docs: standardize demo-vault README
+- docs: drop per-plugin demo-vault setup notes (bootstrap covered by ODU harness)
+- Merge branch 'T105': create the File Explorer Reload demo vault (S2)
+- chore: update libs
+- docs: update
+- docs: migrate to AGENTS.md
+
 ## 1.3.6
 
 - test: seed root-folder children on the live vault root

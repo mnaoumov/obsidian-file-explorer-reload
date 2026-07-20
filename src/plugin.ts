@@ -1,3 +1,4 @@
+import { OpenDemoVaultCommandHandler } from 'obsidian-dev-utils/obsidian/command-handlers/open-demo-vault-command-handler';
 import { PluginBase } from 'obsidian-dev-utils/obsidian/plugin/plugin';
 
 import { ReloadFileExplorerCommandHandler } from './command-handlers/reload-file-explorer-command-handler.ts';
@@ -21,6 +22,12 @@ export class Plugin extends PluginBase {
       }),
       new ReloadFolderWithSubfoldersCommandHandler({
         fileExplorerReloader
+      }),
+      new OpenDemoVaultCommandHandler({
+        app: this.app,
+        pluginId: this.manifest.id,
+        pluginNoticeComponent: this.pluginNoticeComponent,
+        pluginVersion: this.manifest.version
       })
     ]);
   }

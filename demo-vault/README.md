@@ -1,9 +1,8 @@
-# File Explorer Reload demo vault
+This is an [Obsidian](https://obsidian.md/) vault demonstrating features of the [File Explorer Reload](https://github.com/mnaoumov/obsidian-file-explorer-reload) plugin.
 
-A small Obsidian vault that demonstrates the [File Explorer Reload](https://github.com/mnaoumov/obsidian-file-explorer-reload) plugin - a **Reload File Explorer** command (plus **Reload Folder** / **Reload Folder with Subfolders** folder right-click menu items) that refreshes the **File Explorer** pane so it matches what is actually on disk.
+## Opening this vault
 
-Open [00 Start](<./00 Start.md>) and work through the notes. Run **Reload File Explorer** from the Command Palette, or right-click a folder and choose one of the reload menu items.
+- **If you already have the plugin installed**, run the **File Explorer Reload: Open demo vault** command — it downloads and opens the latest demo vault automatically.
+- **Otherwise**, download `file-explorer-reload.demo-vault.zip` from the [plugin releases](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases), unzip it, and in Obsidian choose `Manage vaults...` → `Open folder as vault` → select the unzipped folder.
 
-## First open
-
-The first time you open this vault, Obsidian treats it as **untrusted**, so the bundled plugins are listed but not loaded until you **Trust author and enable plugins** and reload. After that, the Demo Vault Helper opens the start note for you.
+On first open, Obsidian treats the vault as untrusted — choose **Trust author and enable plugins** (or enable Community plugins manually), then open [00 Start](<./00 Start.md>).

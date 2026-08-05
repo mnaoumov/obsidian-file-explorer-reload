@@ -39,10 +39,10 @@ export class FileExplorerReloader {
 
   public async reloadFolder(params: FileExplorerReloaderReloadFolderParams): Promise<void> {
     const { directoryPath, isRecursive } = params;
-    const dir = this.app.vault.getAbstractFileByPath(directoryPath);
+    const directory = this.app.vault.getAbstractFileByPath(directoryPath);
 
-    if (!(dir instanceof TFolder)) {
-      throw new Error(`${directoryPath} is not a folder`);
+    if (!(directory instanceof TFolder)) {
+      throw new TypeError(`${directoryPath} is not a folder`);
     }
 
     const isRoot = directoryPath === ROOT_PATH;
@@ -53,34 +53,40 @@ export class FileExplorerReloader {
 
     const readdir = (this.app.vault.adapter as FileSystemAdapter).fsPromises.readdir;
 
-    const existingFileItems = (await readdir(absolutePath, { withFileTypes: true }))
-      .filter((f) => !f.name.startsWith('.'));
+    const directoryEntries = await readdir(absolutePath, { withFileTypes: true });
+    const existingFileItems = directoryEntries.filter((f) => !f.name.startsWith('.'));
     const existingFileNames = new Set(existingFileItems.map((f) => f.name));
 
-    const obsidianFileNames = new Set(dir.children.map((child) => child.name));
+    const obsidianFileNames = new Set(directory.children.map((child) => child.name));
 
     for (const fileName of existingFileNames) {
-      if (!obsidianFileNames.has(fileName)) {
-        const path = combinePath({ directoryPath, fileName });
-        this.consoleDebugComponent.consoleDebug(`Adding new file ${path}`);
-        await adapter.reconcileFile(path, path, false);
+      if (obsidianFileNames.has(fileName)) {
+        continue;
       }
+
+      const path = combinePath({ directoryPath, fileName });
+      this.consoleDebugComponent.consoleDebug(`Adding new file ${path}`);
+      await adapter.reconcileFile(path, path, false);
     }
 
     for (const fileName of obsidianFileNames) {
-      if (!existingFileNames.has(fileName)) {
-        const path = combinePath({ directoryPath, fileName });
-        this.consoleDebugComponent.consoleDebug(`Deleting inexistent ${path}`);
-        await adapter.reconcileFile('', path, false);
+      if (existingFileNames.has(fileName)) {
+        continue;
       }
+
+      const path = combinePath({ directoryPath, fileName });
+      this.consoleDebugComponent.consoleDebug(`Deleting inexistent ${path}`);
+      await adapter.reconcileFile('', path, false);
     }
 
     if (isRecursive) {
       for (const existingFileItem of existingFileItems) {
-        if (existingFileItem.isDirectory()) {
-          const path = combinePath({ directoryPath, fileName: existingFileItem.name });
-          await this.reloadFolder({ directoryPath: path, isRecursive: true });
+        if (!existingFileItem.isDirectory()) {
+          continue;
         }
+
+        const path = combinePath({ directoryPath, fileName: existingFileItem.name });
+        await this.reloadFolder({ directoryPath: path, isRecursive: true });
       }
     }
   }

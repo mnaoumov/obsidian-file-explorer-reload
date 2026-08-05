@@ -13,7 +13,7 @@ export class Plugin extends PluginBase {
       consoleDebugComponent: this.consoleDebugComponent
     });
 
-    this.commandHandlerComponent.registerCommandHandlers([
+    this.commandHandlerComponent.registerCommandHandlers(() => [
       new ReloadFileExplorerCommandHandler({
         fileExplorerReloader
       }),

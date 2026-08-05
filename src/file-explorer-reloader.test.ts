@@ -36,15 +36,15 @@ interface MockDirent {
   name: string;
 }
 
-function createMockDirent(name: string, isDir: boolean): MockDirent {
+function createMockDirent(name: string, isDirectory: boolean): MockDirent {
   return {
-    isDirectory: () => isDir,
+    isDirectory: () => isDirectory,
     name
   };
 }
 
 describe('FileExplorerReloader', () => {
-  let mockDebug: ReturnType<typeof vi.fn<(message: string, ...args: unknown[]) => void>>;
+  let mockDebug: ReturnType<typeof vi.fn<(message: string, ...$arguments: unknown[]) => void>>;
   let mockReaddir: ReturnType<typeof vi.fn>;
   let mockReconcileFile: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFile']>>;
   let mockReconcileFolderCreation: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFolderCreation']>>;

@@ -43,13 +43,14 @@ describe('Plugin', () => {
     const internals = castTo<PluginInternals>(plugin);
     internals._consoleDebugComponent = strictProxy<ConsoleDebugComponent>({ consoleDebug: vi.fn() });
     internals._pluginNoticeComponent = strictProxy<PluginNoticeComponent>({});
-    const registerCommandHandlers = vi.fn();
+    const registerCommandHandlers = vi.fn<CommandHandlerComponent['registerCommandHandlers']>();
     internals._commandHandlerComponent = strictProxy<CommandHandlerComponent>({ registerCommandHandlers });
 
     internals.onloadImpl();
 
     expect(registerCommandHandlers).toHaveBeenCalledOnce();
-    expect(registerCommandHandlers).toHaveBeenCalledWith([
+    // Since obsidian-dev-utils 89.0.0 the handlers are built lazily by a factory, so build them here.
+    expect(registerCommandHandlers.mock.calls[0]?.[0]()).toStrictEqual([
       expect.any(ReloadFileExplorerCommandHandler),
       expect.any(ReloadFolderCommandHandler),
       expect.any(ReloadFolderWithSubfoldersCommandHandler),

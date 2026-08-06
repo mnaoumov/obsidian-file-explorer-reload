@@ -7,13 +7,13 @@ import { ReloadFolderWithSubfoldersCommandHandler } from './command-handlers/rel
 import { FileExplorerReloader } from './file-explorer-reloader.ts';
 
 export class Plugin extends PluginBase {
-  protected override onloadImpl(): void {
+  protected override async onloadImpl(): Promise<void> {
     const fileExplorerReloader = new FileExplorerReloader({
       app: this.app,
       consoleDebugComponent: this.consoleDebugComponent
     });
 
-    this.commandHandlerComponent.registerCommandHandlers(() => [
+    await this.commandHandlerComponent.registerCommandHandlers(() => [
       new ReloadFileExplorerCommandHandler({
         fileExplorerReloader
       }),

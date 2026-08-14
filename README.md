@@ -5,43 +5,47 @@
 [![GitHub downloads](https://img.shields.io/github/downloads/mnaoumov/obsidian-file-explorer-reload/total)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases)
 [![Coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/mnaoumov/obsidian-file-explorer-reload)
 
-This is a plugin for [Obsidian](https://obsidian.md/) that reloads the file explorer files list.
+Copy, move or delete files outside [Obsidian](https://obsidian.md/) while it is open — from your file
+manager, a script, a sync client — and the File Explorer pane can fall behind what is actually on disk.
+It keeps listing files that are gone, and misses files that arrived.
 
-It is needed sometimes when you made a bulk file operation (copy / move / delete) outside of `Obsidian` while it is open and some of those changes aren't reflected in the `File Explorer` pane. So you might see in the `File Explorer` some files that don't actually exist in the file system, or the opposite, you might miss some files that actually exist in the file system.
-
-- [Video of the issue](https://www.youtube.com/watch?v=C-uKULzPNX4).
-- Discussion on the [Official Obsidian forum].
-
-The usual workaround for this problem is to close and reopen `Obsidian` or invoke `Reload app without saving` command, but for big vaults such workarounds adds undesired waiting time, which the current plugin is aiming to avoid.
-
-The plugin adds `Reload File Explorer` command, `Reload Folder` and `Reload Folder with Subfolders` context menu items.
-
-Also you can use this plugin's functionality programmatically
-
-```js
-await app.plugins.plugins['file-explorer-reload'].reloadDirectory(
-  directoryPath,
-  isRecursive
-);
-```
+The usual remedy is **Reload app without saving**, which discards your whole session to refresh one
+pane and is slow on a large vault. This plugin refreshes only the file list: the entire pane, a single
+folder, or a folder and everything beneath it.
 
 ## Demo vault
 
-A demo vault with usage examples ships with every release. You can access it via any of the following:
+**The documentation is a demo vault.** The feature has a note that explains what it does and why you
+would want it, with a nested folder to refresh.
+
+**[Start reading here](<./demo-vault/00 Start.md>)** — it is plain markdown, so it works on GitHub with
+nothing installed.
+
+A copy of the vault ships with every release. You can access it via any of the following:
 
 1. Running the **File Explorer Reload: Open demo vault** command.
 2. Downloading `file-explorer-reload-demo-vault-<version>.zip` (`<version>` is the release version) from the [Releases](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases).
 3. Browsing its source in [`demo-vault/`](./demo-vault/README.md) in this repository.
 
+## What it does
+
+- **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette.
+  [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
+- **Reload Folder** and **Reload Folder with Subfolders** do the same for one part of the tree, from
+  the folder right-click menu — the first shallow, the second all the way down.
+  [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
+
+There is nothing to configure.
+
 ## Installation
 
-The plugin is available in [the official Community Plugins repository](https://community.obsidian.md/plugins/file-explorer-reload).
+The plugin is available in [the official Community Plugins repository](https://obsidian.md/plugins?id=file-explorer-reload).
 
 ### Beta versions
 
-To install the latest beta release of this plugin (regardless if it is available in [the official Community Plugins repository](https://community.obsidian.md) or not), follow these steps:
+To install the latest beta release of this plugin (regardless if it is available in [the official Community Plugins repository](https://obsidian.md/plugins) or not), follow these steps:
 
-1. Ensure you have the [BRAT plugin](https://community.obsidian.md/plugins/obsidian42-brat) installed and enabled.
+1. Ensure you have the [BRAT plugin](https://obsidian.md/plugins?id=obsidian42-brat) installed and enabled.
 2. Click [Install via BRAT](https://intradeus.github.io/http-protocol-redirector?r=obsidian://brat?plugin=https://github.com/mnaoumov/obsidian-file-explorer-reload).
 3. An Obsidian pop-up window should appear. In the window, click the `Add plugin` button once and wait a few seconds for the plugin to install.
 
@@ -56,6 +60,14 @@ window.DEBUG.enable('file-explorer-reload');
 ```
 
 For more details, refer to the [documentation](https://mnaoumov.dev/obsidian-dev-utils/guides/debugging/).
+
+## Changelog
+
+All notable changes to this project will be documented in the [CHANGELOG](./CHANGELOG.md).
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING](./CONTRIBUTING.md) to get set up.
 
 ## Support
 
@@ -72,5 +84,3 @@ For more details, refer to the [documentation](https://mnaoumov.dev/obsidian-dev
 ## License
 
 © [Michael Naumov](https://github.com/mnaoumov/)
-
-[Official Obsidian forum]: https://forum.obsidian.md/t/sometimes-changes-made-outside-of-obsidian-are-not-reflected-in-the-files-pane/73451

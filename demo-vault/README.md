@@ -1,3 +1,5 @@
+# File Explorer Reload demo vault
+
 This is an [Obsidian](https://obsidian.md/) vault demonstrating features of the [File Explorer Reload](https://github.com/mnaoumov/obsidian-file-explorer-reload) plugin.
 
 ## Opening this vault

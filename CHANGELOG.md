@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.13
+
+- test(demo-vault): register the demo-vault coverage suite
+- docs: make the demo vault the documentation, in the standard layout
+
 ## 1.3.12
 
 - chore: update libs and adopt obsidian-integration-testing 10

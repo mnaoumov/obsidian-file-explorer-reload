@@ -16,7 +16,9 @@
     "readdir",
     "Subfolders",
     "tsbuildinfo",
-    "unstub"
+    "unstub",
+    "wikilink",
+    "wikilinks"
   ],
   "ignoreWords": [],
   "import": [],

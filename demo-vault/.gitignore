@@ -11,3 +11,8 @@
 !.obsidian/plugins/file-explorer-reload/
 .obsidian/plugins/file-explorer-reload/*
 !.obsidian/plugins/file-explorer-reload/data.json
+
+# Written straight to disk by the demo buttons in `01 Reload file explorer.md`; a reader clicking
+# Through the walkthrough should not leave the repo dirty.
+Materials/01 Reload file explorer/Demo folder/Created on disk.md
+Materials/01 Reload file explorer/Demo folder/Subfolder/Created deeper on disk.md

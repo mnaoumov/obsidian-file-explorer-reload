@@ -17,6 +17,14 @@ import { defineObsidianPluginVitestConfig } from 'obsidian-dev-utils/script-util
  */
 const DESKTOP_CAPTURE_TEST_FILES = 'src/**/*.desktop-capture.integration.test.ts';
 
+/**
+ * The demo-vault button suite. It drives a real desktop Obsidian like the desktop project, but opens
+ * a copy of the in-repo `demo-vault/` rather than an empty vault — hence its own `globalSetup` — and
+ * needs its own suffix so the desktop project does not also collect it and open it against a vault
+ * with no notes in it.
+ */
+const DEMO_VAULT_TEST_FILES = 'src/**/*.demo-vault.integration.test.ts';
+
 export const config = defineObsidianPluginVitestConfig({
   customProjects(context: ObsidianPluginVitestConfigContext): TestProjectConfiguration[] {
     return [
@@ -25,6 +33,14 @@ export const config = defineObsidianPluginVitestConfig({
           ...context.desktop,
           include: [DESKTOP_CAPTURE_TEST_FILES],
           name: 'capture-screenshots:desktop'
+        }
+      },
+      {
+        test: {
+          ...context.desktop,
+          globalSetup: ['./scripts/demo-vault-global-setup.ts'],
+          include: [DEMO_VAULT_TEST_FILES],
+          name: 'integration-tests:demo-vault'
         }
       }
     ];

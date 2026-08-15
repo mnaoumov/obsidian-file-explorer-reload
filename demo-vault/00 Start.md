@@ -14,11 +14,15 @@ under it.
 
 ## Your first minute
 
-1. Add or delete a file inside this vault using your operating system's file manager, with Obsidian
-   still open. Notice the File Explorer does not necessarily notice.
-2. Run **Reload File Explorer** from the Command Palette. The pane rebuilds from disk and the change
-   appears.
-3. For a narrower refresh, right-click a folder and choose **Reload Folder**.
+1. Open [01 Reload file explorer](<./01 Reload file explorer.md>) and press its first button — it
+   writes a note straight to disk, the way your file manager would, without telling Obsidian.
+2. Look at `Materials/01 Reload file explorer/Demo folder` in the **File Explorer**. If the new note is
+   not there, the pane is stale.
+3. Press the **Reload File Explorer** button. The pane rebuilds from disk and the note appears.
+4. For a narrower refresh, right-click a folder and choose **Reload Folder**.
+
+Every button says what it does by hand, so you can do it the manual way instead — and a last button
+deletes what the others created, leaving the vault as you found it.
 
 ## Features
 

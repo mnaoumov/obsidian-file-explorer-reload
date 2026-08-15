@@ -8,11 +8,53 @@ When you copy, move, or delete files **outside** Obsidian (from your operating s
 
 ## Try it
 
-1. Run **Reload File Explorer** from the Command Palette (open it, then search for the command). The whole **File Explorer** pane rebuilds its file list from disk.
-2. Right-click the **Demo folder** folder in the **File Explorer** and choose **Reload Folder** to refresh just that folder (it contains [Nested note](<./Materials/01 Reload file explorer/Demo folder/Nested note.md>)).
-3. Right-click the same folder and choose **Reload Folder with Subfolders** to also refresh its subfolder, which contains [Deep note](<./Materials/01 Reload file explorer/Demo folder/Subfolder/Deep note.md>).
+The interesting state - a File Explorer that disagrees with the disk - needs a file to appear without Obsidian being told. The button below does exactly what alt-tabbing to your file manager would: it writes straight to disk with Node's `fs`, never through Obsidian's vault API.
 
-To see the real-world effect, add or remove a file inside the vault folder using your operating system's file manager while Obsidian is open. If the pane does not update on its own, run one of the reload actions above and the change appears.
+```code-button
+---
+caption: Create a note on disk, behind Obsidian's back
+---
+await require('/demoSetup.ts').createNoteOnDisk(app);
+```
+
+Manual equivalent: create `Created on disk.md` inside `Materials/01 Reload file explorer/Demo folder` from your operating system's file manager, with Obsidian still open.
+
+Now look at **Demo folder** in the **File Explorer**. If the new note is not there, the pane is stale - which is the whole problem this plugin solves:
+
+```code-button
+---
+caption: Reload File Explorer
+---
+require('/demoSetup.ts').reloadFileExplorer(app);
+```
+
+Manual equivalent: run **File Explorer Reload: Reload File Explorer** from the Command Palette.
+
+The two folder commands are not offered as buttons on purpose: they act on the folder you invoke them from, so a button here would target this note's folder rather than the one the walkthrough is about. Right-click **Demo folder** in the **File Explorer** and choose **Reload Folder** - the real way in anyway. It refreshes just that folder, which contains [Nested note](<./Materials/01 Reload file explorer/Demo folder/Nested note.md>).
+
+To see what **Reload Folder with Subfolders** adds, put a file one level deeper:
+
+```code-button
+---
+caption: Create a note one level deeper on disk
+---
+await require('/demoSetup.ts').createDeepNoteOnDisk(app);
+```
+
+Manual equivalent: create `Created deeper on disk.md` inside `Demo folder/Subfolder` from your file manager.
+
+Right-click **Demo folder** and choose **Reload Folder**: the deeper note stays missing, because that command rebuilds only the folder's own children. Choose **Reload Folder with Subfolders** and it appears, next to [Deep note](<./Materials/01 Reload file explorer/Demo folder/Subfolder/Deep note.md>).
+
+When you are done, put the vault back the way it started:
+
+```code-button
+---
+caption: Delete both created notes from disk
+---
+await require('/demoSetup.ts').removeNotesFromDisk(app);
+```
+
+Manual equivalent: delete both notes in your file manager. Reload afterwards and the File Explorer stops showing them - deletions go stale exactly the same way additions do.
 
 ## Reload folder vs. reload with subfolders
 

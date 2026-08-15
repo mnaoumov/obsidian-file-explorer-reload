@@ -13,6 +13,12 @@ The usual remedy is **Reload app without saving**, which discards your whole ses
 pane and is slow on a large vault. This plugin refreshes only the file list: the entire pane, a single
 folder, or a folder and everything beneath it.
 
+<!-- markdownlint-disable MD033 -->
+
+<a href="images/screenshots/screenshot-desktop-1.png"><img src="images/screenshots/screenshot-desktop-1.png" alt="Refresh the file list: the pane, a folder, or a whole tree" width="600"></a>
+
+<!-- markdownlint-enable MD033 -->
+
 ## Demo vault
 
 **The documentation is a demo vault.** The feature has a note that explains what it does and why you

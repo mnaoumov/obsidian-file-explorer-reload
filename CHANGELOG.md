@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.3.14
+
+- chore: teach cspell the advisory wording
+- chore: update libs
+- test(demo-vault): click every demo button against a real Obsidian
+- docs(demo-vault): give the demo vault its code buttons
+- docs: capture the community-store screenshot set
+- test(plugin): make the onload test await and assert real registrations
+
 ## 1.3.13
 
 - test(demo-vault): register the demo-vault coverage suite

@@ -17,6 +17,8 @@
     "Subfolders",
     "tsbuildinfo",
     "unstub",
+    "unvalidated",
+    "wdio",
     "wikilink",
     "wikilinks"
   ],

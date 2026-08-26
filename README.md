@@ -1,31 +1,22 @@
 # File Explorer Reload
 
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/mnaoumov)
-[![GitHub release](https://img.shields.io/github/v/release/mnaoumov/obsidian-file-explorer-reload)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases)
-[![GitHub downloads](https://img.shields.io/github/downloads/mnaoumov/obsidian-file-explorer-reload/total)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases)
-[![Coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/mnaoumov/obsidian-file-explorer-reload)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/mnaoumov) [![GitHub release](https://img.shields.io/github/v/release/mnaoumov/obsidian-file-explorer-reload)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases) [![GitHub downloads](https://img.shields.io/github/downloads/mnaoumov/obsidian-file-explorer-reload/total)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases) [![Coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/mnaoumov/obsidian-file-explorer-reload)
 
-Copy, move or delete files outside [Obsidian](https://obsidian.md/) while it is open — from your file
-manager, a script, a sync client — and the File Explorer pane can fall behind what is actually on disk.
-It keeps listing files that are gone, and misses files that arrived.
+Copy, move or delete files outside [Obsidian](https://obsidian.md/) while it is open — from your file manager, a script, a sync client — and the File Explorer pane can fall behind what is actually on disk. It keeps listing files that are gone, and misses files that arrived.
 
-The usual remedy is **Reload app without saving**, which discards your whole session to refresh one
-pane and is slow on a large vault. This plugin refreshes only the file list: the entire pane, a single
-folder, or a folder and everything beneath it.
+The usual remedy is **Reload app without saving**, which discards your whole session to refresh one pane and is slow on a large vault. This plugin refreshes only the file list: the entire pane, a single folder, or a folder and everything beneath it.
 
 <!-- markdownlint-disable MD033 -->
 
-<a href="images/screenshots/screenshot-desktop-1.png"><img src="images/screenshots/screenshot-desktop-1.png" alt="Refresh the file list: the pane, a folder, or a whole tree" width="600"></a>
+<a href="https://github.com/mnaoumov/obsidian-file-explorer-reload/blob/HEAD/images/screenshots/screenshot-desktop-1.png"><img src="images/screenshots/screenshot-desktop-1.png" alt="Refresh the file list: the pane, a folder, or a whole tree" width="600"></a>
 
 <!-- markdownlint-enable MD033 -->
 
 ## Demo vault
 
-**The documentation is a demo vault.** The feature has a note that explains what it does and why you
-would want it, with a nested folder to refresh.
+**The documentation is a demo vault.** The feature has a note that explains what it does and why you would want it, with a nested folder to refresh.
 
-**[Start reading here](<./demo-vault/00 Start.md>)** — it is plain markdown, so it works on GitHub with
-nothing installed.
+**[Start reading here](<./demo-vault/00 Start.md>)** — it is plain markdown, so it works on GitHub with nothing installed.
 
 A copy of the vault ships with every release. You can access it via any of the following:
 
@@ -35,11 +26,8 @@ A copy of the vault ships with every release. You can access it via any of the f
 
 ## What it does
 
-- **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette.
-  [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
-- **Reload Folder** and **Reload Folder with Subfolders** do the same for one part of the tree, from
-  the folder right-click menu — the first shallow, the second all the way down.
-  [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
+- **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
+- **Reload Folder** and **Reload Folder with Subfolders** do the same for one part of the tree, from the folder right-click menu — the first shallow, the second all the way down. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
 
 There is nothing to configure.
 

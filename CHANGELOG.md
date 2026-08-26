@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.3.15
+
+- docs(demo-vault): unwrap the notes so Obsidian stops rendering a break per line
+- docs(readme): render the same in Obsidian's plugin page as on GitHub
+- chore: update libs
+- chore: update obsidian-dev-utils to 94.6.1
+- chore: update obsidian-dev-utils to 94.6.0
+- fix: override deepmerge-ts to clear GHSA-ggr8-5vv4-36mx
+- test: gate the demo vault by clicking every code button
+- chore: make the demo-vault button gate trustworthy (obsidian-dev-utils 94.4.1)
+
 ## 1.3.14
 
 - chore: teach cspell the advisory wording

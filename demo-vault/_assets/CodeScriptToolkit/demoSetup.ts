@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 
 // Every helper here writes through `node:fs` on purpose, NOT through `app.vault`.
 // The vault API tells Obsidian what changed, which is precisely the notification this plugin exists to
-// Cope with the absence of — a demo that used it would never produce a stale pane to reload.
+// cope with the absence of — a demo that used it would never produce a stale pane to reload.
 
 const DEMO_FOLDER_PATH = 'Materials/01 Reload file explorer/Demo folder';
 const SUBFOLDER_PATH = `${DEMO_FOLDER_PATH}/Subfolder`;

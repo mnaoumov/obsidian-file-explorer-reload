@@ -71,7 +71,7 @@ beforeAll(async () => {
       app.changeTheme('obsidian');
 
       // The file explorer IS the subject here, so it is the one thing that must
-      // Be open, with the folder the files land in expanded.
+      // be open, with the folder the files land in expanded.
       app.workspace.leftSplit.expand();
       const fileExplorerLeaf = app.workspace.getLeavesOfType('file-explorer')[0];
       if (fileExplorerLeaf) {
@@ -125,13 +125,13 @@ async function openCommandPalette(query: string): Promise<string[]> {
 
       input.value = text;
       // The palette filters from its own input handler, so setting value alone
-      // Would leave every command in the vault on screen.
+      // would leave every command in the vault on screen.
       input.dispatchEvent(new Event('input'));
 
       await sleep(SETTLE_DELAY_IN_MILLISECONDS);
 
       // Reported so the shot can assert the plugin own commands are the ones on
-      // Screen, rather than whatever else matched the word.
+      // screen, rather than whatever else matched the word.
       return Object.values(app.commands.commands)
         .filter((command) => command.id.startsWith(`${pluginId}:`))
         .map((command) => command.name);

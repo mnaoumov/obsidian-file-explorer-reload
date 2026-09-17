@@ -19,9 +19,9 @@ import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 import { ReloadFolderWithSubfoldersCommandHandler } from './reload-folder-with-subfolders-command-handler.ts';
 
 interface ReloadFolderWithSubfoldersCommandHandlerTestAccessor {
-  executeFolder(folder: TFolder): Promise<void>;
-  shouldAddToFolderMenu(params: FolderCommandHandlerShouldAddToFolderMenuParams): boolean;
-  shouldAddToFoldersMenu(params: FolderCommandHandlerShouldAddToFoldersMenuParams): boolean;
+  executeFolder: (folder: TFolder) => Promise<void>;
+  shouldAddToFolderMenu: (params: FolderCommandHandlerShouldAddToFolderMenuParams) => boolean;
+  shouldAddToFoldersMenu: (params: FolderCommandHandlerShouldAddToFoldersMenuParams) => boolean;
 }
 
 function asTestAccessor(handler: ReloadFolderWithSubfoldersCommandHandler): ReloadFolderWithSubfoldersCommandHandlerTestAccessor {

@@ -32,7 +32,7 @@ interface MockChild {
 }
 
 interface MockDirent {
-  isDirectory(): boolean;
+  isDirectory: () => boolean;
   name: string;
 }
 

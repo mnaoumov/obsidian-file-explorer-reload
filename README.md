@@ -8,7 +8,16 @@ The usual remedy is **Reload app without saving**, which discards your whole ses
 
 <!-- markdownlint-disable MD033 -->
 
-<a href="https://github.com/mnaoumov/obsidian-file-explorer-reload/blob/HEAD/images/screenshots/screenshot-desktop-1.png"><img src="images/screenshots/screenshot-desktop-1.png" alt="Refresh the file list: the pane, a folder, or a whole tree" width="600"></a>
+<a href="https://github.com/mnaoumov/obsidian-file-explorer-reload/blob/HEAD/images/screenshots/screenshot-desktop-1.png"><img src="images/screenshots/screenshot-desktop-1.png" alt="Reload the whole file explorer from the command palette" width="600"></a>
+
+<details>
+<summary>More screenshots</summary>
+
+<div>
+<a href="https://github.com/mnaoumov/obsidian-file-explorer-reload/blob/HEAD/images/screenshots/screenshot-desktop-2.png"><img src="images/screenshots/screenshot-desktop-2.png" alt="Reload one folder, or a folder and all its subfolders" width="600"></a>
+</div>
+
+</details>
 
 <!-- markdownlint-enable MD033 -->
 

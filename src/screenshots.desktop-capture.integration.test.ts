@@ -5,7 +5,7 @@
  * driving a staged vault in a real Obsidian and writing
  * images/screenshots/screenshot-desktop-N.png.
  *
- * ONE shot, and the reason is worth recording. The obvious storyboard is a
+ * The commands are the subject, not a before/after, and the reason is worth recording. The obvious storyboard is a
  * stale file explorer next to a refreshed one, and it cannot be built: files
  * written into the vault with Node fs, from this suite, while Obsidian runs,
  * are picked up by Obsidian on its own within a second. The suite asserted the
@@ -15,8 +15,14 @@
  *
  * The pane does fall behind in the situations the README describes (a large
  * vault, a sync client, a watcher that misses an event), but none of those can
- * be staged from a capture run. So the shot shows the plugin SURFACE: the three
+ * be staged from a capture run. So the shots show the plugin SURFACE: the three
  * commands, which is what a reader is buying.
+ *
+ * TWO shots, because no single surface shows all three. The two folder commands
+ * are folder-scoped, and the palette resolves its target through
+ * `workspace.getActiveFile()`, which is never a folder, so they never appear
+ * there. Frame 1 is the palette with the pane command. Frame 2 is a folder's
+ * right-click menu with the two folder commands.
  *
  * Desktop only, per the manifest.
  */
@@ -41,7 +47,6 @@ import {
   it
 } from 'vitest';
 
-const PLUGIN_ID = 'file-explorer-reload';
 const WIDTH_IN_PIXELS = 1200;
 const HEIGHT_IN_PIXELS = 800;
 
@@ -91,22 +96,52 @@ beforeAll(async () => {
 });
 
 describe('desktop store screenshots', () => {
-  it('1 - the commands it adds', async () => {
-    const commandNames = await openCommandPalette('Reload');
-    expect(commandNames.length).toBeGreaterThan(1);
-    await shoot(1, 'Refresh the file list: the pane, a folder, or a whole tree');
+  it('1 - the pane command', async () => {
+    // `Reload file` rather than `Reload`: the bare word also matched the core
+    // `Reload app without saving`, which took the top row.
+    const rowTitles = await openCommandPalette('Reload file');
+    // The row's `: ` between the plugin name and the command is drawn by CSS, so
+    // it is not in the text.
+    expect(rowTitles).toStrictEqual(['File Explorer ReloadReload file explorer']);
+    await shoot(1, 'Reload the whole file explorer from the command palette');
+    await closeCommandPalette();
+  });
+
+  it('2 - the folder commands', async () => {
+    const itemTitles = await openFolderMenu('Projects');
+    expect(itemTitles).toContain('Reload folder');
+    expect(itemTitles).toContain('Reload folder with subfolders');
+    await shoot(2, 'Reload one folder, or a folder and all its subfolders');
   });
 });
 
 /**
- * Opens the command palette and filters it to this plugin commands.
+ * Closes the command palette the previous shot left open.
+ */
+async function closeCommandPalette(): Promise<void> {
+  await evalInObsidian({
+    async callback({ lib: { pressKey, waitUntil } }) {
+      const PALETTE_TIMEOUT_IN_MILLISECONDS = 15_000;
+      await pressKey({ key: 'Escape' });
+      await waitUntil({
+        message: 'the command palette to close',
+        predicate: () => !document.querySelector('.prompt'),
+        timeoutInMilliseconds: PALETTE_TIMEOUT_IN_MILLISECONDS
+      });
+    },
+    vaultPath: vaultPath()
+  });
+}
+
+/**
+ * Opens the command palette and filters it.
  *
  * @param query - What to type into the palette.
- * @returns The names of the commands this plugin registers.
+ * @returns The titles of the rows the palette shows.
  */
 async function openCommandPalette(query: string): Promise<string[]> {
   return await evalInObsidian({
-    async callback({ app, lib: { waitUntil }, pluginId, query: text }) {
+    async callback({ app, lib: { waitUntil }, query: text }) {
       const PALETTE_TIMEOUT_IN_MILLISECONDS = 15_000;
       const SETTLE_DELAY_IN_MILLISECONDS = 900;
 
@@ -130,13 +165,65 @@ async function openCommandPalette(query: string): Promise<string[]> {
 
       await sleep(SETTLE_DELAY_IN_MILLISECONDS);
 
-      // Reported so the shot can assert the plugin own commands are the ones on
-      // screen, rather than whatever else matched the word.
-      return Object.values(app.commands.commands)
-        .filter((command) => command.id.startsWith(`${pluginId}:`))
-        .map((command) => command.name);
+      // Reported so the shot can assert which rows are on screen, rather than
+      // whatever else matched the query.
+      return [...document.querySelectorAll('.prompt .suggestion-item')].map((item) => item.textContent);
     },
-    input: { pluginId: PLUGIN_ID, query },
+    input: { query },
+    vaultPath: vaultPath()
+  });
+}
+
+/**
+ * Right-clicks a folder in the file explorer and opens the plugin's items.
+ *
+ * @param folderPath - The vault-relative path of the folder.
+ * @returns The titles of every menu item on screen, submenus included.
+ */
+async function openFolderMenu(folderPath: string): Promise<string[]> {
+  return await evalInObsidian({
+    async callback({ folderPath: path, lib: { clickElement, waitUntil } }) {
+      const MENU_TIMEOUT_IN_MILLISECONDS = 10_000;
+      const SETTLE_DELAY_IN_MILLISECONDS = 900;
+      const SUBMENU_TITLE = 'File Explorer Reload';
+
+      const titleEl = document.querySelector(`.nav-folder-title[data-path="${CSS.escape(path)}"]`);
+      if (!(titleEl instanceof HTMLElement)) {
+        throw new TypeError(`The file explorer shows no folder ${path}.`);
+      }
+
+      // A TRUSTED right click, so the menu anchors at the folder, where a user
+      // would see it, rather than in the top-left corner.
+      await clickElement({ button: 'right', element: titleEl });
+
+      await waitUntil({
+        message: 'the folder context menu to open',
+        predicate: () => Boolean(document.body.querySelector('.menu')),
+        timeoutInMilliseconds: MENU_TIMEOUT_IN_MILLISECONDS
+      });
+
+      function readTitles(): string[] {
+        return [...document.querySelectorAll('.menu .menu-item-title')].map((item) => item.textContent);
+      }
+
+      // The folder items sit in a plugin-titled submenu. A trusted hover on its
+      // parent did not open it; a click does, as it does for a user.
+      const submenuParent = [...document.querySelectorAll('.menu .menu-item')].find((item) => item.querySelector('.menu-item-title')?.textContent === SUBMENU_TITLE);
+      if (!(submenuParent instanceof HTMLElement)) {
+        throw new TypeError(`The folder menu has no ${SUBMENU_TITLE} submenu: ${readTitles().join(' | ')}`);
+      }
+      await clickElement({ element: submenuParent });
+      await waitUntil({
+        message: 'the File Explorer Reload submenu to open',
+        predicate: () => readTitles().includes('Reload folder'),
+        timeoutInMilliseconds: MENU_TIMEOUT_IN_MILLISECONDS
+      });
+
+      await sleep(SETTLE_DELAY_IN_MILLISECONDS);
+
+      return readTitles();
+    },
+    input: { folderPath },
     vaultPath: vaultPath()
   });
 }

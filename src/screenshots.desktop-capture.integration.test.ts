@@ -149,6 +149,20 @@ async function openCommandPalette(query: string): Promise<string[]> {
  * @param caption - The caption drawn across the bottom of the frame.
  */
 async function shoot(index: number, caption: string): Promise<void> {
+  /*
+   * The command palette's search field keeps focus, and its caret blinks: which phase the shutter caught
+   * decided 20 pixels at `x:320 y:95-114`, so two captures of an unchanged tree differed. Blurring it
+   * leaves nothing blinking in the frame.
+   */
+  await evalInObsidian({
+    callback() {
+      if (activeDocument.activeElement instanceof HTMLElement) {
+        activeDocument.activeElement.blur();
+      }
+    },
+    vaultPath: vaultPath()
+  });
+
   const bytes = await captureObsidianScreenshot({
     heightInPixels: HEIGHT_IN_PIXELS,
     vaultPath: vaultPath(),

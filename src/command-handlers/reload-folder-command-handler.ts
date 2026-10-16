@@ -1,10 +1,10 @@
-import type { TFolder } from 'obsidian';
 import type {
   FolderCommandHandlerShouldAddToFolderMenuParams,
   FolderCommandHandlerShouldAddToFoldersMenuParams
-} from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
+} from '@mnaoumov/obsidian-lib/command-handlers/folder-command-handler';
+import type { TFolder } from 'obsidian';
 
-import { FolderCommandHandler } from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
+import { FolderCommandHandler } from '@mnaoumov/obsidian-lib/command-handlers/folder-command-handler';
 
 import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 
@@ -30,13 +30,13 @@ export class ReloadFolderCommandHandler extends FolderCommandHandler {
     await this.fileExplorerReloader.reloadFolder({ directoryPath: folder.path, isRecursive: false });
   }
 
-  // eslint-disable-next-line obsidian-dev-utils/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.
+  // eslint-disable-next-line typescript-dev-toolkit/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.
   protected override shouldAddToFolderMenu(params: FolderCommandHandlerShouldAddToFolderMenuParams): boolean {
     super.shouldAddToFolderMenu(params);
     return true;
   }
 
-  // eslint-disable-next-line obsidian-dev-utils/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.
+  // eslint-disable-next-line typescript-dev-toolkit/params-options-name-match -- Overrides the base method, so it must keep the base parameter type.
   protected override shouldAddToFoldersMenu(params: FolderCommandHandlerShouldAddToFoldersMenuParams): boolean {
     super.shouldAddToFoldersMenu(params);
     return true;

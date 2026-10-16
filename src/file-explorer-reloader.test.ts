@@ -1,13 +1,13 @@
+import type { ConsoleDebugComponent } from '@mnaoumov/obsidian-lib/components/console-debug-component';
 import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 import type {
   App as AppOriginal,
   FileSystemAdapter,
   TFolder
 } from 'obsidian';
-import type { ConsoleDebugComponent } from 'obsidian-dev-utils/obsidian/components/console-debug-component';
 
-import { castTo } from 'obsidian-dev-utils/object-utils';
-import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
+import { castTo } from '@mnaoumov/typescript-lib/object-utils';
+import { strictProxy } from '@mnaoumov/typescript-test-toolkit/strict-proxy';
 import { App } from 'obsidian-test-mocks/obsidian';
 import {
   beforeEach,

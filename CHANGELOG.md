@@ -91,7 +91,7 @@
 
 - docs: standardize demo-vault README
 - docs: drop per-plugin demo-vault setup notes (bootstrap covered by the obsidian-dev-utils harness)
-- docs(demo-vault): create the File Explorer Reload demo vault
+- docs(demo-vault): create the `File Explorer Reload` demo vault
 - chore: update libs
 - docs: update
 - docs: migrate to AGENTS.md

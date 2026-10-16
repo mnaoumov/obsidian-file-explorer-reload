@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-File Explorer Reload is a desktop-only Obsidian plugin that reloads the file explorer pane, reconciling Obsidian's in-memory vault tree with the actual files on disk. It is built on `obsidian-dev-utils`.
+`File Explorer Reload` is a desktop-only Obsidian plugin that reloads the file explorer pane, reconciling Obsidian's in-memory vault tree with the actual files on disk. It is built on `obsidian-dev-utils`.
 
 ## Commands
 

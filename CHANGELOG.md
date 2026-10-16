@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.18
+
+- refactor: move off obsidian-dev-utils onto the @mnaoumov packages
+- docs: mark plugin names as code in markdown and comments
+
 ## 1.3.17
 
 - test(screenshots): merge the move onto applyObsidianTheme

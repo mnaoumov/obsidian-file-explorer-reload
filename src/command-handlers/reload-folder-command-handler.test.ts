@@ -1,11 +1,11 @@
-import type { TFolder } from 'obsidian';
 import type {
   FolderCommandHandlerShouldAddToFolderMenuParams,
   FolderCommandHandlerShouldAddToFoldersMenuParams
-} from 'obsidian-dev-utils/obsidian/command-handlers/folder-command-handler';
+} from '@mnaoumov/obsidian-lib/command-handlers/folder-command-handler';
+import type { TFolder } from 'obsidian';
 
-import { castTo } from 'obsidian-dev-utils/object-utils';
-import { strictProxy } from 'obsidian-dev-utils/strict-proxy';
+import { castTo } from '@mnaoumov/typescript-lib/object-utils';
+import { strictProxy } from '@mnaoumov/typescript-test-toolkit/strict-proxy';
 import {
   beforeEach,
   describe,

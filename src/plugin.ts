@@ -1,5 +1,5 @@
-import { OpenDemoVaultCommandHandler } from 'obsidian-dev-utils/obsidian/command-handlers/open-demo-vault-command-handler';
-import { PluginBase } from 'obsidian-dev-utils/obsidian/plugin/plugin';
+import { OpenDemoVaultCommandHandler } from '@mnaoumov/obsidian-lib/command-handlers/open-demo-vault-command-handler';
+import { PluginBase } from '@mnaoumov/obsidian-lib/plugin/plugin';
 
 import { ReloadFileExplorerCommandHandler } from './command-handlers/reload-file-explorer-command-handler.ts';
 import { ReloadFolderCommandHandler } from './command-handlers/reload-folder-command-handler.ts';

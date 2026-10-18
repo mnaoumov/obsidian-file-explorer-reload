@@ -28,7 +28,7 @@ caption: Reload File Explorer
 require('/demoSetup.ts').reloadFileExplorer(app);
 ```
 
-Manual equivalent: run **File Explorer Reload: Reload File Explorer** from the Command Palette.
+Manual equivalent: run **`File Explorer Reload`: Reload File Explorer** from the Command Palette.
 
 The two folder commands are not offered as buttons on purpose: they act on the folder you invoke them from, so a button here would target this note's folder rather than the one the walkthrough is about. Right-click **Demo folder** in the **File Explorer** and choose **Reload Folder** - the real way in anyway. It refreshes just that folder, which contains [Nested note](<./Materials/01 Reload file explorer/Demo folder/Nested note.md>).
 

@@ -46,7 +46,7 @@ describe('Plugin', () => {
     appMock = App.createConfigured__();
     app = appMock.asOriginalType__();
 
-    // The real PluginBase reads dev-utils state off the app (and the global app).
+    // The real PluginBase reads obsidian-lib state off the app (and the global app).
     seedOnRawTarget(app, 'obsidianDevUtilsState', {});
     seedOnRawTarget(app.workspace, 'onLayoutReady', () => {
       // The command handlers are registered from onloadImpl, before layout-ready.

@@ -40,6 +40,15 @@ A copy of the vault ships with every release. You can access it via any of the f
 
 There is nothing to configure.
 
+## Similar plugins
+
+- [`Vault File Refresh`](https://community.obsidian.md/plugins/vault-file-refresh) — polls the whole vault every few seconds and reconciles new files and changed content on its own, with a command to scan on demand; this plugin scans only when you ask, from the Command Palette or a folder's menu, and also removes what is gone from disk.
+- [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) — polls a fixed list of folders and adds files that external sync tools create, on desktop and mobile; it watches for new files only, while this plugin reloads on demand, any folder or the whole vault, adding and removing both.
+- [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) — a sidebar button that indexes hidden dot-folders into the file tree, reindexes the metadata cache and reloads community plugins; it reads hidden folders from disk, while this plugin reloads the ordinary folders of the vault.
+- [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) — not in the community directory; a button in the file explorer header that renames each symlinked folder out and back, so Obsidian re-reads it; this plugin reads the folders from disk itself, symlinked or not.
+
+Last searched for similar plugins on 2026-10-26.
+
 ## Installation
 
 The plugin is available in [the official Community Plugins repository](https://community.obsidian.md/plugins/file-explorer-reload).

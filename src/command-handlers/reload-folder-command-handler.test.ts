@@ -19,9 +19,9 @@ import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 import { ReloadFolderCommandHandler } from './reload-folder-command-handler.ts';
 
 interface ReloadFolderCommandHandlerTestAccessor {
-  executeFolder: (folder: TFolder) => Promise<void>;
-  shouldAddToFolderMenu: (params: FolderCommandHandlerShouldAddToFolderMenuParams) => boolean;
-  shouldAddToFoldersMenu: (params: FolderCommandHandlerShouldAddToFoldersMenuParams) => boolean;
+  readonly executeFolder: (folder: TFolder) => Promise<void>;
+  readonly shouldAddToFolderMenu: (params: FolderCommandHandlerShouldAddToFolderMenuParams) => boolean;
+  readonly shouldAddToFoldersMenu: (params: FolderCommandHandlerShouldAddToFoldersMenuParams) => boolean;
 }
 
 function asTestAccessor(handler: ReloadFolderCommandHandler): ReloadFolderCommandHandlerTestAccessor {

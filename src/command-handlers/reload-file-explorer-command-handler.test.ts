@@ -13,7 +13,7 @@ import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 import { ReloadFileExplorerCommandHandler } from './reload-file-explorer-command-handler.ts';
 
 interface ReloadFileExplorerCommandHandlerTestAccessor {
-  execute: () => Promise<void>;
+  readonly execute: () => Promise<void>;
 }
 
 function asTestAccessor(handler: ReloadFileExplorerCommandHandler): ReloadFileExplorerCommandHandlerTestAccessor {

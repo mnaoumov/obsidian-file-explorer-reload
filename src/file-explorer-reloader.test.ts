@@ -28,12 +28,12 @@ import { getDataAdapterEx } from '@obsidian-typings/obsidian-public-latest/imple
 import { FileExplorerReloader } from './file-explorer-reloader.ts';
 
 interface MockChild {
-  name: string;
+  readonly name: string;
 }
 
 interface MockDirent {
-  isDirectory: () => boolean;
-  name: string;
+  readonly isDirectory: () => boolean;
+  readonly name: string;
 }
 
 function createMockDirent(name: string, isDirectory: boolean): MockDirent {

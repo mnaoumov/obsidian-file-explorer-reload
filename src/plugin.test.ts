@@ -23,10 +23,12 @@ const STRICT_PROXY_TARGET_SYMBOL = Symbol.for('strictProxyTarget');
 const PLUGIN_BASE_OWNED_COMMAND_ID = 'unlock-active-note';
 
 interface AppGlobal {
+  // eslint-disable-next-line typescript-dev-toolkit/readonly-interface-members -- Test setup replaces the global app and teardown restores it.
   app: AppType;
 }
 
 interface LoadedFlagHolder {
+  // eslint-disable-next-line typescript-dev-toolkit/readonly-interface-members -- The test sets the loaded flag before exercising plugin unload.
   loaded__: boolean;
 }
 

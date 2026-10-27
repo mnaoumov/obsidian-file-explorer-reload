@@ -40,12 +40,16 @@ A copy of the vault ships with every release. You can access it via any of the f
 
 There is nothing to configure.
 
-## Similar plugins
+## See also
 
-- [`Vault File Refresh`](https://community.obsidian.md/plugins/vault-file-refresh) — polls the whole vault every few seconds and reconciles new files and changed content on its own, with a command to scan on demand; this plugin scans only when you ask, from the Command Palette or a folder's menu, and also removes what is gone from disk.
-- [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) — polls a fixed list of folders and adds files that external sync tools create, on desktop and mobile; it watches for new files only, while this plugin reloads on demand, any folder or the whole vault, adding and removing both.
-- [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) — a sidebar button that indexes hidden dot-folders into the file tree, reindexes the metadata cache and reloads community plugins; it reads hidden folders from disk, while this plugin reloads the ordinary folders of the vault.
-- [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) — not in the community directory; a button in the file explorer header that renames each symlinked folder out and back, so Obsidian re-reads it; this plugin reads the folders from disk itself, symlinked or not.
+[My other Obsidian resources](https://github.com/mnaoumov/obsidian-resources)
+
+| Plugin | Features | How `File Explorer Reload` differs |
+| --- | --- | --- |
+| [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) | Periodic polling of configured folders; adds new synced files; desktop/mobile | Broader reconciliation: adds and removes files; any folder/vault on request |
+| [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) | Indexes hidden folders; rebuilds metadata cache; reloads plugins | Different scope: reloads ordinary vault folders |
+| [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) | Unlisted; explorer button renames symlink folders out/back to trigger reread | Same refresh goal; reads folders directly, symlinked or ordinary |
+| [`Vault File Refresh`](https://community.obsidian.md/plugins/vault-file-refresh) | Periodic whole-vault reconciliation; new/changed files; on-demand scan | Alternative timing: only on request; folder or vault scope; removes missing files too |
 
 Last searched for similar plugins on 2026-10-26.
 
@@ -82,10 +86,6 @@ Contributions are welcome — see [CONTRIBUTING](./CONTRIBUTING.md) to get set u
 <a href="https://www.buymeacoffee.com/mnaoumov" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" width="217"></a>
 
 <!-- markdownlint-enable MD033 -->
-
-## My other Obsidian resources
-
-[See my other Obsidian resources](https://github.com/mnaoumov/obsidian-resources).
 
 ## License
 

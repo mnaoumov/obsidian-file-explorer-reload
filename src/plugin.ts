@@ -1,3 +1,4 @@
+import { OpenBugReportCommandHandler } from '@mnaoumov/obsidian-lib/command-handlers/open-bug-report-command-handler';
 import { OpenDemoVaultCommandHandler } from '@mnaoumov/obsidian-lib/command-handlers/open-demo-vault-command-handler';
 import { PluginBase } from '@mnaoumov/obsidian-lib/plugin/plugin';
 
@@ -22,6 +23,11 @@ export class Plugin extends PluginBase {
       }),
       new ReloadFolderWithSubfoldersCommandHandler({
         fileExplorerReloader
+      }),
+      new OpenBugReportCommandHandler({
+        app: this.app,
+        gitHubRepo: 'mnaoumov/obsidian-file-explorer-reload',
+        pluginId: this.manifest.id
       }),
       new OpenDemoVaultCommandHandler({
         app: this.app,

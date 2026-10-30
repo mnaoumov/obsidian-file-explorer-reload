@@ -75,6 +75,7 @@ describe('Plugin', () => {
       'reload-file-explorer',
       'reload-folder',
       'reload-folder-with-subfolders',
+      'report-bug',
       'open-demo-vault'
     ]);
 

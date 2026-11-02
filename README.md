@@ -42,7 +42,7 @@ There is nothing to configure.
 
 ## See also
 
-[My other Obsidian resources](https://github.com/mnaoumov/obsidian-resources)
+[My other Obsidian resources](https://mnaoumov.dev/obsidian/)
 
 | Plugin | Features | How `File Explorer Reload` differs |
 | --- | --- | --- |

@@ -42,4 +42,4 @@ Filing from the CLI or the API (`gh issue create --body`, or an AI agent filing 
   - `command-handlers/reload-file-explorer-command-handler.ts` — `GlobalCommandHandler`; reloads the whole vault from root recursively
   - `command-handlers/reload-folder-command-handler.ts` — `FolderCommandHandler`; reloads a single folder (non-recursive) from the folder context menu
   - `command-handlers/reload-folder-with-subfolders-command-handler.ts` — `FolderCommandHandler`; reloads a folder and its subfolders recursively
-- **`main` field** points to `src/main.ts` (Obsidian plugin source entry; built artifact is `dist/build/main.js`, not published to npm).
+- **`main` field** points to `src/main.ts` (Obsidian plugin source entry; built artifact is `dist/build/main.js`, not published to `npm`).

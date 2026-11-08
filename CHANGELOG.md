@@ -2,193 +2,200 @@
 
 ## 1.4.0
 
-- docs(readme): point bug reports at the Report a bug command
-- feat: add a Report a bug command
-- docs: add issue-filing instructions for AI agents
-- chore(github): give the bug form the field ids bug-report links prefill
-- build(deps): override re2js to ^2.9.1 for GHSA-gg6h-894w-4m9c
-- build(deps): bump `typescript-dev-toolkit` to ^5.2.0
-- build(deps): bump `obsidian-dev-toolkit` to ^7.1.1 and `typescript-dev-toolkit` to ^5.1.0
-- chore: adopt readonly interface member policy
-- docs(readme): combine related resources and plugin comparisons
-- docs: add a Similar plugins section to the README
+This release has 1 new feature and 4 documentation changes. 5 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### New
+
+- add a Report a bug command
+
+### Documentation
+
+- **readme:** point bug reports at the Report a bug command
+- add issue-filing instructions for AI agents
+- **readme:** combine related resources and plugin comparisons
+- add a Similar plugins section to the README
 
 ## 1.3.19
 
-- chore(deps): move to `obsidian-lib` 6 and `obsidian-dev-toolkit` 5
-- docs: name `obsidian-lib` where comments said dev-utils
-- docs: shorten the debugging section
-- chore: replace leftover `obsidian-dev-utils` references with @mnaoumov/obsidian-lib
-- docs(readme): lead the Debugging section with `Advanced Debug Mode`
-- build(deps): float brace-expansion, sharp and fast-uri past their advisories
-- docs: mark plugin names as code
-- chore(github): point questions to Discussions from the new-issue page
-- ci: merge attesting release assets through the toolkit's reusable workflow
+This release has 4 documentation changes. 5 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Documentation
+
+- name `obsidian-lib` where comments said dev-utils
+- shorten the debugging section
+- **readme:** lead the Debugging section with `Advanced Debug Mode`
+- mark plugin names as code
 
 ## 1.3.18
 
-- refactor: move off `obsidian-dev-utils` onto the @mnaoumov packages
-- docs: mark plugin names as code in markdown and comments
+This release has 1 documentation change. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
+
+### Documentation
+
+- mark plugin names as code in markdown and comments
 
 ## 1.3.17
 
-- test(screenshots): merge the move onto applyObsidianTheme
-- test(screenshots): merge the harness caret hiding in place of the local blur
-- test(screenshots): merge the second desktop frame for the folder commands
-- test(screenshots): merge the reproducible desktop frame
-- chore(deps): merge the `obsidian-integration-testing` 17 and `obsidian-dev-utils` 107 float
-- chore(deps): merge the `obsidian-test-mocks` 7 float
-- fix(test): merge the headless demo-vault toolkit install
-- fix(deps): restore the lockfile's missing resolved and integrity fields
-- fix(deps): float devalue to 5.9.4, clearing GHSA-9rgm-9g3h-6x36
-- build(`markdownlint`): forbid hard-wrapped markdown paragraphs
-- chore(deps): drop the two dead dedupe overrides
-- chore(deps): drop the dead markdown-it override
-- chore(deps): drop the dead js-yaml override
-- style(comments): stop capitalizing the middle of a wrapped comment
-- docs: drop the rule-id citations from the pin table
-- docs(changelog): name `obsidian-dev-utils` by its package name
-- docs: replace the private tracker references with what they pointed at
-- chore(deps): move to `obsidian-dev-utils` 103
-- chore: adopt the `npm` run gate branch gate
-- docs: say where the debug command is run
-- test: bring the in-closure wait ceiling under the transport's per-eval cap
-- docs: name the unversioned demo-vault asset and the folder it unzips into
-- chore: make the LICENSE copyright line checkable by the linter and guard it against the year roll-over
-- fix(deps): move to `obsidian-integration-testing` 12 and `obsidian-dev-utils` 101
-- fix(build): wire build:compile to buildCompile and drop the duplicate leaf script
+This release has 5 fixes and 5 documentation changes. 15 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Fixed
+
+- **test:** merge the headless demo-vault toolkit install
+- **deps:** restore the lockfile's missing resolved and integrity fields
+- **deps:** float devalue to 5.9.4, clearing GHSA-9rgm-9g3h-6x36
+- **deps:** move to `obsidian-integration-testing` 12 and `obsidian-dev-utils` 101
+- **build:** wire build:compile to buildCompile and drop the duplicate leaf script
+
+### Documentation
+
+- drop the rule-id citations from the pin table
+- **changelog:** name `obsidian-dev-utils` by its package name
+- replace the private tracker references with what they pointed at
+- say where the debug command is run
+- name the unversioned demo-vault asset and the folder it unzips into
 
 ## 1.3.16
 
-- chore(deps): sweep caret-ranged dependencies to latest
-- fix(deps): move to `obsidian-integration-testing` 11 and `obsidian-dev-utils` 96.5.2
-- fix(deps): drop the brace-expansion file: override that breaks a clean install
-- docs: point plugin-directory links at community.obsidian.md
+This release has 2 fixes and 1 documentation change. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
+
+### Fixed
+
+- **deps:** move to `obsidian-integration-testing` 11 and `obsidian-dev-utils` 96.5.2
+- **deps:** drop the brace-expansion file: override that breaks a clean install
+
+### Documentation
+
+- point plugin-directory links at community.obsidian.md
 
 ## 1.3.15
 
-- docs(demo-vault): unwrap the notes so Obsidian stops rendering a break per line
-- docs(readme): render the same in Obsidian's plugin page as on `GitHub`
-- chore: update libs
-- chore: update `obsidian-dev-utils` to 94.6.1
-- chore: update `obsidian-dev-utils` to 94.6.0
-- fix: override deepmerge-ts to clear GHSA-ggr8-5vv4-36mx
-- test: gate the demo vault by clicking every code button
-- chore: make the demo-vault button gate trustworthy (`obsidian-dev-utils` 94.4.1)
+This release has 1 fix and 2 documentation changes. 5 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Fixed
+
+- override deepmerge-ts to clear GHSA-ggr8-5vv4-36mx
+
+### Documentation
+
+- **demo-vault:** unwrap the notes so Obsidian stops rendering a break per line
+- **readme:** render the same in Obsidian's plugin page as on `GitHub`
 
 ## 1.3.14
 
-- chore: teach `cspell` the advisory wording
-- chore: update libs
-- test(demo-vault): click every demo button against a real Obsidian
-- docs(demo-vault): give the demo vault its code buttons
-- docs: capture the community-store screenshot set
-- test(plugin): make the onload test await and assert real registrations
+This release has 2 documentation changes. 4 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Documentation
+
+- **demo-vault:** give the demo vault its code buttons
+- capture the community-store screenshot set
 
 ## 1.3.13
 
-- test(demo-vault): register the demo-vault coverage suite
-- docs: make the demo vault the documentation, in the standard layout
+This release has 1 documentation change. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
+
+### Documentation
+
+- make the demo vault the documentation, in the standard layout
 
 ## 1.3.12
 
-- chore: update libs and adopt `obsidian-integration-testing` 10
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.3.11
 
-- chore: update libs
-- chore: update libs
-- chore(`vitest`): adopt the shared Obsidian plugin `vitest` configuration
-- chore: update libs and clear the `npm` audit
-- docs: fix the demo vault download instructions
+This release has 1 documentation change. 4 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Documentation
+
+- fix the demo vault download instructions
 
 ## 1.3.10
 
-- chore: update libs
-- chore: update libs
+This release has maintenance changes only. 2 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
 
 ## 1.3.9
 
-- chore: update libs
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.3.8
 
-- chore: update libs
-- chore(demo-vault): drop committed Invocables placeholder
-- fix(demo-vault): export invoke() from startup script; add Invocables folder
+This release has 1 fix. 2 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Fixed
+
+- **demo-vault:** export invoke() from startup script; add Invocables folder
 
 ## 1.3.7
 
-- docs: standardize demo-vault README
-- docs: drop per-plugin demo-vault setup notes (bootstrap covered by the `obsidian-dev-utils` harness)
-- docs(demo-vault): create the `File Explorer Reload` demo vault
-- chore: update libs
-- docs: update
-- docs: migrate to AGENTS.md
+This release has 5 documentation changes. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
+
+### Documentation
+
+- standardize demo-vault README
+- drop per-plugin demo-vault setup notes (bootstrap covered by the `obsidian-dev-utils` harness)
+- **demo-vault:** create the `File Explorer Reload` demo vault
+- update
+- migrate to AGENTS.md
 
 ## 1.3.6
 
-- test: seed root-folder children on the live vault root
-- chore: update libs
-- chore: update `obsidian-dev-utils` to 85.0.0
-- refactor: pass params objects to FileExplorerReloader
-- build: lock typescript to 6.0.3
-- test: wire integration-testing vitest-setup into integration projects
-- chore: update libs
-- chore: sort tsconfig types
+This release has maintenance changes only. 8 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
 
 ## 1.3.5
 
-- refactor: new template
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.3.4
 
-- chore: update libs
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.3.3
 
-- chore: update template
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.3.2
 
-- chore: add attestation
-- fix: manifest
-- refactor: new template
+This release has 1 fix. 2 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### Fixed
+
+- manifest
 
 ## 1.3.1
 
-- chore: update template
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.3.0
 
-- refactor: commands
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.2.39
 
-- chore: update libs
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.2.38
 
-- chore: update libs
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.2.37
 
-- chore: update libs
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.2.36
 
-- chore: update libs
-- chore: lint
-- chore: enable `markdownlint`
+This release has maintenance changes only. 3 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
 
 ## 1.2.35
 
-- fix: build
-- chore: update libs
+This release has 1 fix. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
+
+### Fixed
+
+- build
 
 ## 1.2.34
 
-- chore: enable conventional commits
+This release has maintenance changes only. 1 maintenance commit (tests, build, CI, refactoring, dependencies) is not listed.
 
 ## 1.2.33
 
@@ -260,6 +267,10 @@
 
 ## 1.2.16
 
+This release has 1 other change.
+
+### Other changes
+
 - New template
 
 ## 1.2.15
@@ -267,6 +278,10 @@
 - Minor changes
 
 ## 1.2.14
+
+This release has 1 other change.
+
+### Other changes
 
 - Update template
 
@@ -295,6 +310,10 @@
 - Minor changes
 
 ## 1.2.7
+
+This release has 1 other change.
+
+### Other changes
 
 - Avoid default exports
 

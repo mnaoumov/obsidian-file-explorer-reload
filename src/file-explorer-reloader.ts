@@ -51,9 +51,12 @@ export class FileExplorerReloader {
     await adapter.reconcileFolderCreation(directoryPath, directoryPath);
     const absolutePath = isRoot ? adapter.basePath : `${adapter.basePath}/${directoryPath}`;
 
-    const readdir = (this.app.vault.adapter as FileSystemAdapter).fsPromises.readdir;
+    const fileSystemAdapter = this.app.vault.adapter;
+    if (!(fileSystemAdapter instanceof FileSystemAdapter)) {
+      throw new TypeError('The vault adapter is not a file system adapter');
+    }
 
-    const directoryEntries = await readdir(absolutePath, { withFileTypes: true });
+    const directoryEntries = await fileSystemAdapter.fsPromises.readdir(absolutePath, { withFileTypes: true });
     const existingFileItems = directoryEntries.filter((f) => !f.name.startsWith('.'));
     const existingFileNames = new Set(existingFileItems.map((f) => f.name));
 

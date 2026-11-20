@@ -2,13 +2,17 @@ import type { ConsoleDebugComponent } from '@mnaoumov/obsidian-lib/components/co
 import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 import type {
   App as AppOriginal,
-  FileSystemAdapter,
+  DataAdapter,
+  FileSystemAdapter as FileSystemAdapterOriginal,
   TFolder
 } from 'obsidian';
 
 import { castTo } from '@mnaoumov/typescript-lib/object-utils';
 import { strictProxy } from '@mnaoumov/typescript-test-toolkit/strict-proxy';
-import { App } from 'obsidian-test-mocks/obsidian';
+import {
+  App,
+  FileSystemAdapter
+} from 'obsidian-test-mocks/obsidian';
 import {
   beforeEach,
   describe,
@@ -50,6 +54,7 @@ describe('FileExplorerReloader', () => {
   let mockReconcileFolderCreation: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFolderCreation']>>;
   let reloader: FileExplorerReloader;
   let mockGetAbstractFileByPath: ReturnType<typeof vi.fn<AppOriginal['vault']['getAbstractFileByPath']>>;
+  let vaultAdapter: DataAdapter;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -60,15 +65,21 @@ describe('FileExplorerReloader', () => {
     mockReconcileFolderCreation = vi.fn<DataAdapterEx['reconcileFolderCreation']>().mockResolvedValue(undefined);
     mockGetAbstractFileByPath = vi.fn();
 
+    const fileSystemAdapter = FileSystemAdapter.create__('/vault');
+    Object.defineProperty(fileSystemAdapter, 'fsPromises', {
+      value: strictProxy<FileSystemAdapterOriginal['fsPromises']>({
+        readdir: castTo<FileSystemAdapterOriginal['fsPromises']['readdir']>(mockReaddir)
+      })
+    });
+    vaultAdapter = fileSystemAdapter.asOriginalType__();
+
     const mockApp = strictProxy<AppOriginal>({
-      vault: {
-        adapter: strictProxy<FileSystemAdapter>({
-          fsPromises: strictProxy<FileSystemAdapter['fsPromises']>({
-            readdir: castTo<FileSystemAdapter['fsPromises']['readdir']>(mockReaddir)
-          })
-        }),
+      vault: castTo<AppOriginal['vault']>({
+        get adapter(): DataAdapter {
+          return vaultAdapter;
+        },
         getAbstractFileByPath: mockGetAbstractFileByPath
-      }
+      })
     });
 
     vi.mocked(getDataAdapterEx).mockReturnValue(strictProxy<DataAdapterEx>({
@@ -115,6 +126,13 @@ describe('FileExplorerReloader', () => {
       mockGetAbstractFileByPath.mockReturnValue(null);
 
       await expect(reloader.reloadFolder({ directoryPath: 'nonexistent', isRecursive: false })).rejects.toThrow('nonexistent is not a folder');
+    });
+
+    it('should throw if the vault adapter is not a file system adapter', async () => {
+      setupFolder('docs', []);
+      vaultAdapter = strictProxy<DataAdapter>({});
+
+      await expect(reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false })).rejects.toThrow('The vault adapter is not a file system adapter');
     });
 
     it('should add new files not in Obsidian vault', async () => {

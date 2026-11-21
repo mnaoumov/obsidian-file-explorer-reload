@@ -9,6 +9,7 @@ import type {
 
 import { castTo } from '@mnaoumov/typescript-lib/object-utils';
 import { strictProxy } from '@mnaoumov/typescript-test-toolkit/strict-proxy';
+import { TFile } from 'obsidian';
 import {
   App,
   FileSystemAdapter
@@ -37,19 +38,39 @@ interface MockChild {
 
 interface MockDirent {
   readonly isDirectory: () => boolean;
+  readonly isFile: () => boolean;
   readonly name: string;
 }
 
-function createMockDirent(name: string, isDirectory: boolean): MockDirent {
+interface MockStat {
+  readonly mtimeMs: number;
+  readonly size: number;
+}
+
+function createMockDirent(name: string, isDirectory: boolean, isFile = !isDirectory): MockDirent {
   return {
     isDirectory: () => isDirectory,
+    isFile: () => isFile,
     name
   };
+}
+
+function getChildFile(folder: TFolder, name: string): TFile {
+  const child = folder.children.find((c) => c.name === name);
+  if (!(child instanceof TFile)) {
+    throw new TypeError(`No file ${name} in the mock folder`);
+  }
+  return child;
+}
+
+function matchingStat(file: TFile): MockStat {
+  return { mtimeMs: file.stat.mtime, size: file.stat.size };
 }
 
 describe('FileExplorerReloader', () => {
   let mockDebug: ReturnType<typeof vi.fn<(message: string, ...$arguments: unknown[]) => void>>;
   let mockReaddir: ReturnType<typeof vi.fn>;
+  let mockStat: ReturnType<typeof vi.fn<(path: string) => Promise<MockStat>>>;
   let mockReconcileFile: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFile']>>;
   let mockReconcileFolderCreation: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFolderCreation']>>;
   let reloader: FileExplorerReloader;
@@ -61,6 +82,7 @@ describe('FileExplorerReloader', () => {
 
     mockDebug = vi.fn();
     mockReaddir = vi.fn();
+    mockStat = vi.fn<(path: string) => Promise<MockStat>>();
     mockReconcileFile = vi.fn<DataAdapterEx['reconcileFile']>().mockResolvedValue(undefined);
     mockReconcileFolderCreation = vi.fn<DataAdapterEx['reconcileFolderCreation']>().mockResolvedValue(undefined);
     mockGetAbstractFileByPath = vi.fn();
@@ -68,7 +90,8 @@ describe('FileExplorerReloader', () => {
     const fileSystemAdapter = FileSystemAdapter.create__('/vault');
     Object.defineProperty(fileSystemAdapter, 'fsPromises', {
       value: strictProxy<FileSystemAdapterOriginal['fsPromises']>({
-        readdir: castTo<FileSystemAdapterOriginal['fsPromises']['readdir']>(mockReaddir)
+        readdir: castTo<FileSystemAdapterOriginal['fsPromises']['readdir']>(mockReaddir),
+        stat: castTo<FileSystemAdapterOriginal['fsPromises']['stat']>(mockStat)
       })
     });
     vaultAdapter = fileSystemAdapter.asOriginalType__();
@@ -105,8 +128,10 @@ describe('FileExplorerReloader', () => {
     return castTo<TFolder>(folder.asOriginalType2__());
   }
 
-  function setupFolder(path: string, children: MockChild[]): void {
-    mockGetAbstractFileByPath.mockReturnValue(createFolder(path, children));
+  function setupFolder(path: string, children: MockChild[]): TFolder {
+    const folder = createFolder(path, children);
+    mockGetAbstractFileByPath.mockReturnValue(folder);
+    return folder;
   }
 
   describe('reloadFileExplorer', () => {
@@ -157,14 +182,85 @@ describe('FileExplorerReloader', () => {
       expect(mockDebug).toHaveBeenCalledWith('Deleting inexistent docs/deleted.md');
     });
 
-    it('should not add or delete files that exist in both', async () => {
-      setupFolder('docs', [{ name: 'existing.md' }]);
+    it('should not reconcile files that exist in both and did not change', async () => {
+      const folder = setupFolder('docs', [{ name: 'existing.md' }]);
       mockReaddir.mockResolvedValue([
         createMockDirent('existing.md', false)
+      ]);
+      mockStat.mockResolvedValue(matchingStat(getChildFile(folder, 'existing.md')));
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockStat).toHaveBeenCalledWith('/vault/docs/existing.md');
+      expect(mockReconcileFile).not.toHaveBeenCalled();
+    });
+
+    it('should treat a sub-millisecond mtime difference as unchanged', async () => {
+      const folder = setupFolder('docs', [{ name: 'existing.md' }]);
+      mockReaddir.mockResolvedValue([
+        createMockDirent('existing.md', false)
+      ]);
+      const stat = matchingStat(getChildFile(folder, 'existing.md'));
+      mockStat.mockResolvedValue({ ...stat, mtimeMs: stat.mtimeMs + 0.3 });
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockReconcileFile).not.toHaveBeenCalled();
+    });
+
+    it('should reconcile an existing file whose mtime changed on disk', async () => {
+      const folder = setupFolder('docs', [{ name: 'changed.md' }]);
+      mockReaddir.mockResolvedValue([
+        createMockDirent('changed.md', false)
+      ]);
+      const stat = matchingStat(getChildFile(folder, 'changed.md'));
+      mockStat.mockResolvedValue({ ...stat, mtimeMs: stat.mtimeMs + 5000 });
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockReconcileFile).toHaveBeenCalledOnce();
+      expect(mockReconcileFile).toHaveBeenCalledWith('docs/changed.md', 'docs/changed.md', false);
+      expect(mockDebug).toHaveBeenCalledWith('Refreshing changed file docs/changed.md');
+    });
+
+    it('should reconcile an existing file whose size changed on disk', async () => {
+      const folder = setupFolder('/', [{ name: 'changed.md' }]);
+      mockReaddir.mockResolvedValue([
+        createMockDirent('changed.md', false)
+      ]);
+      const stat = matchingStat(getChildFile(folder, 'changed.md'));
+      mockStat.mockResolvedValue({ ...stat, size: stat.size + 1 });
+
+      await reloader.reloadFolder({ directoryPath: '/', isRecursive: false });
+
+      expect(mockStat).toHaveBeenCalledWith('/vault/changed.md');
+      expect(mockReconcileFile).toHaveBeenCalledWith('changed.md', 'changed.md', false);
+    });
+
+    it('should not stat an entry that is neither a file nor a directory', async () => {
+      setupFolder('docs', [{ name: 'link.md' }]);
+      mockReaddir.mockResolvedValue([
+        createMockDirent('link.md', false, false)
       ]);
 
       await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
 
+      expect(mockStat).not.toHaveBeenCalled();
+      expect(mockReconcileFile).not.toHaveBeenCalled();
+    });
+
+    it('should not stat a file on disk that Obsidian holds as a folder', async () => {
+      const app = App.createConfigured__();
+      const folder = app.vault.createFolderSync__('docs');
+      app.vault.createFolderSync__('docs/clash');
+      mockGetAbstractFileByPath.mockReturnValue(castTo<TFolder>(folder.asOriginalType2__()));
+      mockReaddir.mockResolvedValue([
+        createMockDirent('clash', false)
+      ]);
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockStat).not.toHaveBeenCalled();
       expect(mockReconcileFile).not.toHaveBeenCalled();
     });
 
@@ -218,8 +314,9 @@ describe('FileExplorerReloader', () => {
     });
 
     it('should not recurse into non-directory items when isRecursive is true', async () => {
-      setupFolder('docs', [{ name: 'file.md' }]);
+      const folder = setupFolder('docs', [{ name: 'file.md' }]);
       mockReaddir.mockResolvedValue([createMockDirent('file.md', false)]);
+      mockStat.mockResolvedValue(matchingStat(getChildFile(folder, 'file.md')));
 
       await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
 

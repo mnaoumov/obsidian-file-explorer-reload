@@ -2,9 +2,9 @@
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/mnaoumov) [![GitHub release](https://img.shields.io/github/v/release/mnaoumov/obsidian-file-explorer-reload)](https://github.com/mnaoumov/obsidian-file-explorer-reload/releases) [![Obsidian downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&query=%24%5B%27file-explorer-reload%27%5D.downloads&label=Obsidian%20downloads)](https://community.obsidian.md/plugins/file-explorer-reload) [![Minimum Obsidian version](https://img.shields.io/github/manifest-json/minAppVersion/mnaoumov/obsidian-file-explorer-reload?label=Obsidian)](https://github.com/mnaoumov/obsidian-file-explorer-reload/blob/main/manifest.json) [![Coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/mnaoumov/obsidian-file-explorer-reload)
 
-Copy, move or delete files outside [Obsidian](https://obsidian.md/) while it is open — from your file manager, a script, a sync client — and the File Explorer pane can fall behind what is actually on disk. It keeps listing files that are gone, and misses files that arrived.
+Copy, move or delete files outside [Obsidian](https://obsidian.md/) while it is open — from your file manager, a script, a sync client — and the File Explorer pane can fall behind what is actually on disk. It keeps listing files that are gone, misses files that arrived, and keeps showing the old text of a note another program rewrote.
 
-The usual remedy is **Reload app without saving**, which discards your whole session to refresh one pane and is slow on a large vault. This plugin refreshes only the file list: the entire pane, a single folder, or a folder and everything beneath it.
+The usual remedy is **Reload app without saving**, which discards your whole session to refresh one pane and is slow on a large vault. This plugin refreshes only the files: the entire pane, a single folder, or a folder and everything beneath it.
 
 <!-- markdownlint-disable MD033 -->
 
@@ -37,6 +37,7 @@ A copy of the vault ships with every release. You can access it via any of the f
 
 - **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
 - **Reload Folder** and **Reload Folder with Subfolders** do the same for one part of the tree, from the folder right-click menu — the first shallow, the second all the way down. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
+- Every reload also picks up files whose content changed on disk: a file whose size or modification time differs from what Obsidian holds is re-read, so an open note shows the new text and its links and properties update.
 
 There is nothing to configure.
 
@@ -49,7 +50,7 @@ There is nothing to configure.
 | [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) | Polls a configured list of folders every few seconds; adds newly synced files; desktop and mobile | Same goal, other trigger: reloads only on request, but any folder or the whole vault; also removes files gone from disk |
 | [`External Rename Handler`](https://community.obsidian.md/plugins/external-rename-handler) (my plugin) | Treats a rename made outside Obsidian as a rename, not a delete and a create | Complements it: reconciles files added or removed outside Obsidian; does not pair them into renames |
 | [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) | Sidebar pane; reveals hidden folders; reindexes the metadata cache; reloads community plugins | Narrower than it: refreshes the file list only; leaves hidden folders hidden |
-| [`Reload Current File`](https://community.obsidian.md/plugins/reload-current-file) | Reloads the open note when its file changes on disk; keeps cursor and scroll; automatic or by command | Different layer: refreshes the file list, not the content of the open note |
+| [`Reload Current File`](https://community.obsidian.md/plugins/reload-current-file) | Reloads the open note when its file changes on disk; keeps cursor and scroll; automatic or by command | Wider, on request only: re-reads every changed file in the reloaded folders, open or not, and also adds and removes files; does not keep the cursor |
 | [`SMB Rescan`](https://github.com/DanielDocekal/obsidian-smb-rescan) | Unlisted; rescans the vault every 60 seconds, on window focus and on demand; adds and removes files; reloads changed open notes | Same goal, other trigger: reloads only on request; one folder, shallow or recursive, or the whole vault |
 | [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) | Unlisted; file explorer header button; renames each symlinked folder away and back so Obsidian rereads it | Same goal: reads folders from disk instead of renaming anything; no header button |
 | [`Symlink Refresher`](https://github.com/chrisdmacrae/symlinks-obsidian) | Archived; renames symlinks on a timer so Obsidian rereads them | Same goal: reads folders from disk on request instead of renaming on a timer |

@@ -37,7 +37,9 @@ Filing from the CLI or the API (`gh issue create --body`, or an AI agent filing 
 - **Root config files** are thin re-exports — actual logic lives in `scripts/` (`eslint.config.mts` → `scripts/eslint-config.ts`, `commitlint.config.ts` → `scripts/commitlint-config.ts`).
 - **`src/`** — plugin source:
   - `main.ts` — Obsidian entry point (default export of `Plugin`)
-  - `plugin.ts` — `Plugin extends PluginBase`; `onloadImpl` constructs the `FileExplorerReloader` and wires a `CommandHandlerComponent` (with the three command handlers, an `AppActiveFileProvider`, a `PluginCommandRegistrar`, and a `MenuEventRegistrarComponent`)
+  - `plugin.ts` — `Plugin extends PluginBase`; `onloadImpl` adds the settings component and tab, constructs the `FileExplorerReloader`, registers the command handlers, and adds the `FileExplorerReloadButtonComponent`, whose click runs the `reload-file-explorer` command by id
+  - `plugin-settings.ts`, `plugin-settings-component.ts`, `plugin-settings-tab.ts` — the one setting, `shouldShowReloadButton` (default on), and its toggle
+  - `file-explorer-reload-button-component.ts` — adds a nav button to the header of every File Explorer leaf through Obsidian's `HeaderDom.addNavButton`, at layout ready, on `layout-change` and on every settings load or save; removes them when the setting is off and on unload
   - `file-explorer-reloader.ts` — core reconcile logic; walks the on-disk folder via the data adapter (`getDataAdapterEx`, `FileSystemAdapter` `readdir`) and adds/deletes files to sync Obsidian's `TFolder` children, re-reconciles a file present on both sides whose on-disk `mtime`/`size` differs from its `TFile.stat` (so Obsidian fires `modified`), recursing when requested
   - `command-handlers/reload-file-explorer-command-handler.ts` — `GlobalCommandHandler`; reloads the whole vault from root recursively
   - `command-handlers/reload-folder-command-handler.ts` — `FolderCommandHandler`; reloads a single folder (non-recursive) from the folder context menu

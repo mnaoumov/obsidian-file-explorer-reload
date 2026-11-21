@@ -35,12 +35,12 @@ A copy of the vault ships with every release. You can access it via any of the f
 
 ## What it does
 
-- **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
+- **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette or the reload button in the File Explorer header. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
 - **Reload Folder** and **Reload Folder with Subfolders** do the same for one part of the tree, from the folder right-click menu — the first shallow, the second all the way down. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
 - Every reload also picks up files whose content changed on disk: a file whose size or modification time differs from what Obsidian holds is re-read, so an open note shows the new text and its links and properties update.
 - After every reload, a notice says what it changed (how many items were added, removed or re-read), or that the tree was already up to date.
 
-There is nothing to configure.
+The one setting, **Show reload button**, hides that header button.
 
 ## See also
 
@@ -53,7 +53,7 @@ There is nothing to configure.
 | [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) | Sidebar pane; reveals hidden folders; reindexes the metadata cache; reloads community plugins | Narrower than it: refreshes the file list only; leaves hidden folders hidden |
 | [`Reload Current File`](https://community.obsidian.md/plugins/reload-current-file) | Reloads the open note when its file changes on disk; keeps cursor and scroll; automatic or by command | Wider, on request only: re-reads every changed file in the reloaded folders, open or not, and also adds and removes files; does not keep the cursor |
 | [`SMB Rescan`](https://github.com/DanielDocekal/obsidian-smb-rescan) | Unlisted; rescans the vault every 60 seconds, on window focus and on demand; adds and removes files; reloads changed open notes | Same goal, other trigger: reloads only on request; one folder, shallow or recursive, or the whole vault |
-| [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) | Unlisted; file explorer header button; renames each symlinked folder away and back so Obsidian rereads it | Same goal: reads folders from disk instead of renaming anything; no header button |
+| [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) | Unlisted; file explorer header button; renames each symlinked folder away and back so Obsidian rereads it | Same goal: reads folders from disk instead of renaming anything; the header button can be hidden |
 | [`Symlink Refresher`](https://github.com/chrisdmacrae/symlinks-obsidian) | Archived; renames symlinks on a timer so Obsidian rereads them | Same goal: reads folders from disk on request instead of renaming on a timer |
 | [`Vault File Refresh`](https://community.obsidian.md/plugins/vault-file-refresh) | Polls the whole vault every 8 seconds; adds new files; picks up content changes; command for an on-demand scan | Same goal, other trigger: reloads only on request; one folder, shallow or recursive, or the whole vault |
 | [`Vault Refresh`](https://github.com/BitNinja01/bn_obsidian_vault_refresh) | Unlisted; ribbon button and command; reconciles the whole vault | Same goal: also reloads one folder, shallow or recursive; no ribbon button |

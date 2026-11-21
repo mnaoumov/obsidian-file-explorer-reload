@@ -2,6 +2,8 @@ import { GlobalCommandHandler } from '@mnaoumov/obsidian-lib/command-handlers/gl
 
 import type { FileExplorerReloader } from '../file-explorer-reloader.ts';
 
+export const RELOAD_FILE_EXPLORER_COMMAND_ID = 'reload-file-explorer';
+
 interface ReloadFileExplorerCommandHandlerConstructorParams {
   readonly fileExplorerReloader: FileExplorerReloader;
 }
@@ -12,7 +14,7 @@ export class ReloadFileExplorerCommandHandler extends GlobalCommandHandler {
   public constructor(params: ReloadFileExplorerCommandHandlerConstructorParams) {
     super({
       icon: 'refresh-ccw',
-      id: 'reload-file-explorer',
+      id: RELOAD_FILE_EXPLORER_COMMAND_ID,
       name: 'Reload file explorer'
     });
     this.fileExplorerReloader = params.fileExplorerReloader;

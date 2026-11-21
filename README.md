@@ -46,12 +46,18 @@ There is nothing to configure.
 
 | Plugin | Features | How `File Explorer Reload` differs |
 | --- | --- | --- |
-| [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) | Periodic polling of configured folders; adds new synced files; desktop/mobile | Broader reconciliation: adds and removes files; any folder/vault on request |
-| [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) | Indexes hidden folders; rebuilds metadata cache; reloads plugins | Different scope: reloads ordinary vault folders |
-| [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) | Unlisted; explorer button renames symlink folders out/back to trigger reread | Same refresh goal; reads folders directly, symlinked or ordinary |
-| [`Vault File Refresh`](https://community.obsidian.md/plugins/vault-file-refresh) | Periodic whole-vault reconciliation; new/changed files; on-demand scan | Alternative timing: only on request; folder or vault scope; removes missing files too |
+| [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) | Polls a configured list of folders every few seconds; adds newly synced files; desktop and mobile | Same goal, other trigger: reloads only on request, but any folder or the whole vault; also removes files gone from disk |
+| [`External Rename Handler`](https://community.obsidian.md/plugins/external-rename-handler) (my plugin) | Treats a rename made outside Obsidian as a rename, not a delete and a create | Complements it: reconciles files added or removed outside Obsidian; does not pair them into renames |
+| [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) | Sidebar pane; reveals hidden folders; reindexes the metadata cache; reloads community plugins | Narrower than it: refreshes the file list only; leaves hidden folders hidden |
+| [`Reload Current File`](https://community.obsidian.md/plugins/reload-current-file) | Reloads the open note when its file changes on disk; keeps cursor and scroll; automatic or by command | Different layer: refreshes the file list, not the content of the open note |
+| [`SMB Rescan`](https://github.com/DanielDocekal/obsidian-smb-rescan) | Unlisted; rescans the vault every 60 seconds, on window focus and on demand; adds and removes files; reloads changed open notes | Same goal, other trigger: reloads only on request; one folder, shallow or recursive, or the whole vault |
+| [`Symlink Refresh Button`](https://github.com/camfung/obsidian-symlink-refresh-button) | Unlisted; file explorer header button; renames each symlinked folder away and back so Obsidian rereads it | Same goal: reads folders from disk instead of renaming anything; no header button |
+| [`Symlink Refresher`](https://github.com/chrisdmacrae/symlinks-obsidian) | Archived; renames symlinks on a timer so Obsidian rereads them | Same goal: reads folders from disk on request instead of renaming on a timer |
+| [`Vault File Refresh`](https://community.obsidian.md/plugins/vault-file-refresh) | Polls the whole vault every 8 seconds; adds new files; picks up content changes; command for an on-demand scan | Same goal, other trigger: reloads only on request; one folder, shallow or recursive, or the whole vault |
+| [`Vault Refresh`](https://github.com/BitNinja01/bn_obsidian_vault_refresh) | Unlisted; ribbon button and command; reconciles the whole vault | Same goal: also reloads one folder, shallow or recursive; no ribbon button |
+| [`Vault Refresh`](https://github.com/saltymouse/obsidian-vault-refresh) | Unlisted; ribbon button and command; adds new files; removes renamed or deleted ones | Same goal: also reloads one folder, shallow or recursive; no ribbon button |
 
-Last searched for similar plugins on 2026-10-26.
+Last searched for similar plugins on 2026-11-20.
 
 ## Installation
 

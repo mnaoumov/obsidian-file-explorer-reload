@@ -17,6 +17,8 @@
     "obsidianmd",
     "pmpm",
     "readdir",
+    "rescan",
+    "rescans",
     "Subfolders",
     "tsbuildinfo",
     "unstub",

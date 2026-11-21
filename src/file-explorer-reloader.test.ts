@@ -1,4 +1,5 @@
 import type { ConsoleDebugComponent } from '@mnaoumov/obsidian-lib/components/console-debug-component';
+import type { PluginNoticeComponent } from '@mnaoumov/obsidian-lib/components/plugin-notice-component';
 import type { DataAdapterEx } from '@obsidian-typings/obsidian-public-latest/implementations';
 import type {
   App as AppOriginal,
@@ -69,6 +70,7 @@ function matchingStat(file: TFile): MockStat {
 
 describe('FileExplorerReloader', () => {
   let mockDebug: ReturnType<typeof vi.fn<(message: string, ...$arguments: unknown[]) => void>>;
+  let mockShowNotice: ReturnType<typeof vi.fn<PluginNoticeComponent['showNotice']>>;
   let mockReaddir: ReturnType<typeof vi.fn>;
   let mockStat: ReturnType<typeof vi.fn<(path: string) => Promise<MockStat>>>;
   let mockReconcileFile: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFile']>>;
@@ -81,6 +83,7 @@ describe('FileExplorerReloader', () => {
     vi.clearAllMocks();
 
     mockDebug = vi.fn();
+    mockShowNotice = vi.fn<PluginNoticeComponent['showNotice']>();
     mockReaddir = vi.fn();
     mockStat = vi.fn<(path: string) => Promise<MockStat>>();
     mockReconcileFile = vi.fn<DataAdapterEx['reconcileFile']>().mockResolvedValue(undefined);
@@ -113,7 +116,8 @@ describe('FileExplorerReloader', () => {
 
     reloader = new FileExplorerReloader({
       app: mockApp,
-      consoleDebugComponent: strictProxy<ConsoleDebugComponent>({ consoleDebug: mockDebug })
+      consoleDebugComponent: strictProxy<ConsoleDebugComponent>({ consoleDebug: mockDebug }),
+      pluginNoticeComponent: strictProxy<PluginNoticeComponent>({ showNotice: mockShowNotice })
     });
   });
 
@@ -342,6 +346,72 @@ describe('FileExplorerReloader', () => {
 
       expect(mockReconcileFile).toHaveBeenCalledWith('new.md', 'new.md', false);
       expect(mockReconcileFile).toHaveBeenCalledWith('', 'old.md', false);
+    });
+  });
+
+  describe('summary notice', () => {
+    it('should say the file explorer is up to date when a root reload changes nothing', async () => {
+      setupFolder('/', []);
+      mockReaddir.mockResolvedValue([]);
+
+      await reloader.reloadFileExplorer();
+
+      expect(mockShowNotice).toHaveBeenCalledOnce();
+      expect(mockShowNotice).toHaveBeenCalledWith('The file explorer is already up to date.');
+    });
+
+    it('should name the folder when a folder reload changes nothing', async () => {
+      setupFolder('docs', []);
+      mockReaddir.mockResolvedValue([]);
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockShowNotice).toHaveBeenCalledWith('Folder "docs" is already up to date.');
+    });
+
+    it('should count a single added item and a single removed item', async () => {
+      setupFolder('docs', [{ name: 'old.md' }]);
+      mockReaddir.mockResolvedValue([createMockDirent('new.md', false)]);
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockShowNotice).toHaveBeenCalledWith('Folder "docs" reloaded: 1 item added, 1 item removed.');
+    });
+
+    it('should count a single changed file', async () => {
+      const folder = setupFolder('docs', [{ name: 'changed.md' }]);
+      mockReaddir.mockResolvedValue([createMockDirent('changed.md', false)]);
+      const stat = matchingStat(getChildFile(folder, 'changed.md'));
+      mockStat.mockResolvedValue({ ...stat, size: stat.size + 1 });
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockShowNotice).toHaveBeenCalledWith('Folder "docs" reloaded: 1 changed file re-read.');
+    });
+
+    it('should sum the changes across subfolders into one notice', async () => {
+      const rootFolder = createFolder('docs', [{ name: 'a.md' }, { name: 'b.md' }]);
+      const subFolder = createFolder('docs/sub', [{ name: 'c.md' }]);
+      mockGetAbstractFileByPath
+        .mockReturnValueOnce(rootFolder)
+        .mockReturnValueOnce(subFolder);
+      mockReaddir
+        .mockResolvedValueOnce([
+          createMockDirent('sub', true),
+          createMockDirent('x.md', false),
+          createMockDirent('y.md', false)
+        ])
+        .mockResolvedValueOnce([
+          createMockDirent('c.md', false),
+          createMockDirent('z.md', false)
+        ]);
+      const stat = matchingStat(getChildFile(subFolder, 'c.md'));
+      mockStat.mockResolvedValue({ ...stat, mtimeMs: stat.mtimeMs + 5000 });
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
+
+      expect(mockShowNotice).toHaveBeenCalledOnce();
+      expect(mockShowNotice).toHaveBeenCalledWith('Folder "docs" reloaded: 4 items added, 2 items removed, 1 changed file re-read.');
     });
   });
 });

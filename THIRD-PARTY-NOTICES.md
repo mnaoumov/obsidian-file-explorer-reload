@@ -2,12 +2,40 @@
 
 ## `SMB Rescan`
 
-The check that re-reads a file whose content changed on disk, by comparing its on-disk modification time with the one Obsidian holds and passing the file to Obsidian's `reconcileFile`, is adapted from [`SMB Rescan`](https://github.com/DanielDocekal/obsidian-smb-rescan), used under the MIT License:
+The check that re-reads a file whose content changed on disk, by comparing its on-disk modification time with the one Obsidian holds and passing the file to Obsidian's `reconcileFile`, is adapted from [`SMB Rescan`](https://github.com/DanielDocekal/obsidian-smb-rescan), used under the MIT License. So is the notice that sums up what a reload changed, or says the tree was already up to date:
 
 ```text
 MIT License
 
 Copyright (c) 2026 Daniel Dočekal
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## `Vault File Refresh`
+
+The notice that sums up what a reload changed is also adapted from [`Vault File Refresh`](https://github.com/tikitock/obsidian-vault-file-refresh), used under the MIT License:
+
+```text
+MIT License
+
+Copyright (c) 2026 tikitock
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

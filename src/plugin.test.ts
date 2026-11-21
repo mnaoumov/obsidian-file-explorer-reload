@@ -15,6 +15,7 @@ import {
   vi
 } from 'vitest';
 
+import { FileExplorerReloadButtonComponent } from './file-explorer-reload-button-component.ts';
 import { Plugin } from './plugin.ts';
 
 const STRICT_PROXY_TARGET_SYMBOL = Symbol.for('strictProxyTarget');
@@ -30,6 +31,10 @@ interface AppGlobal {
 interface LoadedFlagHolder {
   // eslint-disable-next-line typescript-dev-toolkit/readonly-interface-members -- The test sets the loaded flag before exercising plugin unload.
   loaded__: boolean;
+}
+
+interface OnClickHolder {
+  readonly onClick: () => void;
 }
 
 const manifest = castTo<PluginManifest>({
@@ -82,8 +87,26 @@ describe('Plugin', () => {
     castTo<LoadedFlagHolder>(plugin).loaded__ = true;
     plugin.unload();
   });
-});
 
+  it('should run the Reload file explorer command when the header button is clicked', async () => {
+    const executeCommandByIdMock = vi.fn<(commandId: string) => void>();
+    seedOnRawTarget(app, 'commands', { executeCommandById: executeCommandByIdMock });
+    const plugin = new Plugin(app, manifest);
+    const addChildSpy = vi.spyOn(plugin, 'addChild');
+
+    await plugin.onload();
+
+    const buttonComponent = addChildSpy.mock.results
+      .map((result) => castTo<unknown>(result.value))
+      .find((child) => child instanceof FileExplorerReloadButtonComponent);
+    castTo<OnClickHolder>(buttonComponent).onClick();
+
+    expect(executeCommandByIdMock).toHaveBeenCalledWith('file-explorer-reload:reload-file-explorer');
+
+    castTo<LoadedFlagHolder>(plugin).loaded__ = true;
+    plugin.unload();
+  });
+});
 function seedOnRawTarget(strictProxiedObject: object, key: string, value: unknown): void {
   const rawTarget = castTo<object | undefined>(Reflect.get(strictProxiedObject, STRICT_PROXY_TARGET_SYMBOL)) ?? strictProxiedObject;
   Reflect.set(rawTarget, key, value);

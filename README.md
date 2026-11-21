@@ -38,6 +38,7 @@ A copy of the vault ships with every release. You can access it via any of the f
 - **Reload File Explorer** rebuilds the whole pane from disk, from the Command Palette. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
 - **Reload Folder** and **Reload Folder with Subfolders** do the same for one part of the tree, from the folder right-click menu — the first shallow, the second all the way down. [01 Reload file explorer](<./demo-vault/01 Reload file explorer.md>)
 - Every reload also picks up files whose content changed on disk: a file whose size or modification time differs from what Obsidian holds is re-read, so an open note shows the new text and its links and properties update.
+- After every reload, a notice says what it changed (how many items were added, removed or re-read), or that the tree was already up to date.
 
 There is nothing to configure.
 

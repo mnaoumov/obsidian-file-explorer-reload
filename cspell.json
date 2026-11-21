@@ -28,7 +28,8 @@
     "wikilinks"
   ],
   "ignoreWords": [
-    "Dočekal"
+    "Dočekal",
+    "tikitock"
   ],
   "import": [],
   "enabled": true

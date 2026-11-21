@@ -11,7 +11,8 @@ export class Plugin extends PluginBase {
   protected override async onloadImpl(): Promise<void> {
     const fileExplorerReloader = new FileExplorerReloader({
       app: this.app,
-      consoleDebugComponent: this.consoleDebugComponent
+      consoleDebugComponent: this.consoleDebugComponent,
+      pluginNoticeComponent: this.pluginNoticeComponent
     });
 
     await this.commandHandlerComponent.registerCommandHandlers(() => [

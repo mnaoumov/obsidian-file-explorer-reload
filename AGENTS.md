@@ -38,7 +38,7 @@ Filing from the CLI or the API (`gh issue create --body`, or an AI agent filing 
 - **`src/`** — plugin source:
   - `main.ts` — Obsidian entry point (default export of `Plugin`)
   - `plugin.ts` — `Plugin extends PluginBase`; `onloadImpl` constructs the `FileExplorerReloader` and wires a `CommandHandlerComponent` (with the three command handlers, an `AppActiveFileProvider`, a `PluginCommandRegistrar`, and a `MenuEventRegistrarComponent`)
-  - `file-explorer-reloader.ts` — core reconcile logic; walks the on-disk folder via the data adapter (`getDataAdapterEx`, `FileSystemAdapter` `readdir`) and adds/deletes files to sync Obsidian's `TFolder` children, recursing when requested
+  - `file-explorer-reloader.ts` — core reconcile logic; walks the on-disk folder via the data adapter (`getDataAdapterEx`, `FileSystemAdapter` `readdir`) and adds/deletes files to sync Obsidian's `TFolder` children, re-reconciles a file present on both sides whose on-disk `mtime`/`size` differs from its `TFile.stat` (so Obsidian fires `modified`), recursing when requested
   - `command-handlers/reload-file-explorer-command-handler.ts` — `GlobalCommandHandler`; reloads the whole vault from root recursively
   - `command-handlers/reload-folder-command-handler.ts` — `FolderCommandHandler`; reloads a single folder (non-recursive) from the folder context menu
   - `command-handlers/reload-folder-with-subfolders-command-handler.ts` — `FolderCommandHandler`; reloads a folder and its subfolders recursively

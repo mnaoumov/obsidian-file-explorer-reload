@@ -27,7 +27,9 @@
     "wikilink",
     "wikilinks"
   ],
-  "ignoreWords": [],
+  "ignoreWords": [
+    "Dočekal"
+  ],
   "import": [],
   "enabled": true
 }

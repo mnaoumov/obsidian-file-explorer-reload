@@ -4,6 +4,7 @@ import { getDataAdapterEx } from '@obsidian-typings/obsidian-public-latest/imple
 import {
   App,
   FileSystemAdapter,
+  TFile,
   TFolder
 } from 'obsidian';
 
@@ -60,7 +61,8 @@ export class FileExplorerReloader {
     const existingFileItems = directoryEntries.filter((f) => !f.name.startsWith('.'));
     const existingFileNames = new Set(existingFileItems.map((f) => f.name));
 
-    const obsidianFileNames = new Set(directory.children.map((child) => child.name));
+    const obsidianChildren = new Map(directory.children.map((child) => [child.name, child]));
+    const obsidianFileNames = new Set(obsidianChildren.keys());
 
     for (const fileName of existingFileNames) {
       if (obsidianFileNames.has(fileName)) {
@@ -80,6 +82,30 @@ export class FileExplorerReloader {
       const path = combinePath({ directoryPath, fileName });
       this.consoleDebugComponent.consoleDebug(`Deleting inexistent ${path}`);
       await adapter.reconcileFile('', path, false);
+    }
+
+    // A file present on both sides whose content changed on disk while the watcher missed it.
+    // Obsidian's own `reconcileFile` fires `modified` for it, which refreshes open views and the metadata cache.
+    // Idea ported from `SMB Rescan` (MIT), see THIRD-PARTY-NOTICES.md.
+    for (const existingFileItem of existingFileItems) {
+      if (!existingFileItem.isFile()) {
+        continue;
+      }
+
+      const obsidianFile = obsidianChildren.get(existingFileItem.name);
+      if (!(obsidianFile instanceof TFile)) {
+        continue;
+      }
+
+      const path = combinePath({ directoryPath, fileName: existingFileItem.name });
+      const absoluteFilePath = `${absolutePath}/${existingFileItem.name}`;
+      const stat = await fileSystemAdapter.fsPromises.stat(absoluteFilePath);
+      if (Math.round(stat.mtimeMs) === obsidianFile.stat.mtime && stat.size === obsidianFile.stat.size) {
+        continue;
+      }
+
+      this.consoleDebugComponent.consoleDebug(`Refreshing changed file ${path}`);
+      await adapter.reconcileFile(path, path, false);
     }
 
     if (isRecursive) {

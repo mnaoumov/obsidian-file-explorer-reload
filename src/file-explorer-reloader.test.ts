@@ -40,10 +40,12 @@ interface MockChild {
 interface MockDirent {
   readonly isDirectory: () => boolean;
   readonly isFile: () => boolean;
+  readonly isSymbolicLink: () => boolean;
   readonly name: string;
 }
 
 interface MockStat {
+  readonly isDirectory?: () => boolean;
   readonly mtimeMs: number;
   readonly size: number;
 }
@@ -52,8 +54,22 @@ function createMockDirent(name: string, isDirectory: boolean, isFile = !isDirect
   return {
     isDirectory: () => isDirectory,
     isFile: () => isFile,
+    isSymbolicLink: () => false,
     name
   };
+}
+
+function createMockLinkDirent(name: string): MockDirent {
+  return {
+    isDirectory: () => false,
+    isFile: () => false,
+    isSymbolicLink: () => true,
+    name
+  };
+}
+
+function directoryStat(isDirectory: boolean): MockStat {
+  return { isDirectory: () => isDirectory, mtimeMs: 0, size: 0 };
 }
 
 function getChildFile(folder: TFolder, name: string): TFile {
@@ -73,6 +89,7 @@ describe('FileExplorerReloader', () => {
   let mockShowNotice: ReturnType<typeof vi.fn<PluginNoticeComponent['showNotice']>>;
   let mockReaddir: ReturnType<typeof vi.fn>;
   let mockStat: ReturnType<typeof vi.fn<(path: string) => Promise<MockStat>>>;
+  let mockRealpath: ReturnType<typeof vi.fn<(path: string) => Promise<string>>>;
   let mockReconcileFile: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFile']>>;
   let mockReconcileFolderCreation: ReturnType<typeof vi.fn<DataAdapterEx['reconcileFolderCreation']>>;
   let reloader: FileExplorerReloader;
@@ -86,6 +103,7 @@ describe('FileExplorerReloader', () => {
     mockShowNotice = vi.fn<PluginNoticeComponent['showNotice']>();
     mockReaddir = vi.fn();
     mockStat = vi.fn<(path: string) => Promise<MockStat>>();
+    mockRealpath = vi.fn<(path: string) => Promise<string>>((path) => Promise.resolve(path));
     mockReconcileFile = vi.fn<DataAdapterEx['reconcileFile']>().mockResolvedValue(undefined);
     mockReconcileFolderCreation = vi.fn<DataAdapterEx['reconcileFolderCreation']>().mockResolvedValue(undefined);
     mockGetAbstractFileByPath = vi.fn();
@@ -94,6 +112,7 @@ describe('FileExplorerReloader', () => {
     Object.defineProperty(fileSystemAdapter, 'fsPromises', {
       value: strictProxy<FileSystemAdapterOriginal['fsPromises']>({
         readdir: castTo<FileSystemAdapterOriginal['fsPromises']['readdir']>(mockReaddir),
+        realpath: castTo<FileSystemAdapterOriginal['fsPromises']['realpath']>(mockRealpath),
         stat: castTo<FileSystemAdapterOriginal['fsPromises']['stat']>(mockStat)
       })
     });
@@ -332,6 +351,76 @@ describe('FileExplorerReloader', () => {
       mockReaddir.mockResolvedValue([createMockDirent('subfolder', true)]);
 
       await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: false });
+
+      expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
+    });
+
+    it('should recurse into a folder symlink or junction when isRecursive is true', async () => {
+      const rootFolder = createFolder('docs', [{ name: 'linked' }]);
+      const linkedFolder = createFolder('docs/linked', []);
+
+      mockGetAbstractFileByPath
+        .mockReturnValueOnce(rootFolder)
+        .mockReturnValueOnce(linkedFolder)
+        .mockReturnValueOnce(linkedFolder);
+      mockReaddir
+        .mockResolvedValueOnce([createMockLinkDirent('linked')])
+        .mockResolvedValueOnce([createMockDirent('new.md', false)]);
+      mockStat.mockResolvedValue(directoryStat(true));
+      mockRealpath.mockImplementation((path) => Promise.resolve(path === '/vault/docs/linked' ? '/elsewhere/target' : path));
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
+
+      expect(mockStat).toHaveBeenCalledWith('/vault/docs/linked');
+      expect(mockReconcileFolderCreation).toHaveBeenCalledWith('docs/linked', 'docs/linked');
+      expect(mockReconcileFile).toHaveBeenCalledWith('docs/linked/new.md', 'docs/linked/new.md', false);
+    });
+
+    it('should not follow a link back to one of its own parent folders', async () => {
+      const rootFolder = createFolder('docs', [{ name: 'loop' }]);
+      mockGetAbstractFileByPath.mockReturnValue(rootFolder);
+      mockReaddir.mockResolvedValue([createMockLinkDirent('loop')]);
+      mockStat.mockResolvedValue(directoryStat(true));
+      mockRealpath.mockImplementation((path) => Promise.resolve(path === '/vault/docs/loop' ? '/vault/docs' : path));
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
+
+      expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
+      expect(mockDebug).toHaveBeenCalledWith('Skipping docs/loop: it links back to one of its own parent folders');
+    });
+
+    it('should not follow a linked folder that Obsidian does not show', async () => {
+      const rootFolder = createFolder('docs', []);
+      mockGetAbstractFileByPath
+        .mockReturnValueOnce(rootFolder)
+        .mockReturnValueOnce(null);
+      mockReaddir.mockResolvedValue([createMockLinkDirent('hidden')]);
+      mockStat.mockResolvedValue(directoryStat(true));
+      mockRealpath.mockImplementation((path) => Promise.resolve(path === '/vault/docs/hidden' ? '/elsewhere/hidden' : path));
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
+
+      expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
+      expect(mockDebug).toHaveBeenCalledWith('Skipping docs/hidden: Obsidian does not show the linked folder');
+    });
+
+    it('should not recurse into a link to a file', async () => {
+      setupFolder('docs', [{ name: 'note.md' }]);
+      mockReaddir.mockResolvedValue([createMockLinkDirent('note.md')]);
+      mockStat.mockResolvedValue(directoryStat(false));
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
+
+      expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
+      expect(mockRealpath).toHaveBeenCalledOnce();
+    });
+
+    it('should not recurse into a dangling link', async () => {
+      setupFolder('docs', [{ name: 'broken' }]);
+      mockReaddir.mockResolvedValue([createMockLinkDirent('broken')]);
+      mockStat.mockRejectedValue(new Error('ENOENT'));
+
+      await reloader.reloadFolder({ directoryPath: 'docs', isRecursive: true });
 
       expect(mockReconcileFolderCreation).toHaveBeenCalledOnce();
     });

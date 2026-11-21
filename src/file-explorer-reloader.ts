@@ -16,6 +16,11 @@ interface CombinePathParams {
   readonly fileName: string;
 }
 
+interface DirectoryEntry {
+  readonly isDirectory: () => boolean;
+  readonly isSymbolicLink: () => boolean;
+}
+
 interface FileExplorerReloaderConstructorParams {
   readonly app: App;
   readonly consoleDebugComponent: ConsoleDebugComponent;
@@ -23,6 +28,7 @@ interface FileExplorerReloaderConstructorParams {
 }
 
 interface FileExplorerReloaderReloadFolderImplParams {
+  readonly ancestorRealPaths: ReadonlySet<string>;
   readonly directoryPath: string;
   readonly isRecursive: boolean;
   readonly summary: ReloadSummary;
@@ -36,6 +42,12 @@ interface FileExplorerReloaderReloadFolderParams {
 interface FormatReloadSummaryParams {
   readonly directoryPath: string;
   readonly summary: ReloadSummary;
+}
+
+interface IsDirectoryEntryParams {
+  readonly absolutePath: string;
+  readonly entry: DirectoryEntry;
+  readonly fileSystemAdapter: FileSystemAdapter;
 }
 
 interface ReloadSummary {
@@ -65,13 +77,13 @@ export class FileExplorerReloader {
   public async reloadFolder(params: FileExplorerReloaderReloadFolderParams): Promise<void> {
     const { directoryPath, isRecursive } = params;
     const summary: ReloadSummary = { added: 0, modified: 0, removed: 0 };
-    await this.reloadFolderImpl({ directoryPath, isRecursive, summary });
+    await this.reloadFolderImpl({ ancestorRealPaths: new Set(), directoryPath, isRecursive, summary });
     // Idea ported from SMB Rescan and Vault File Refresh (both MIT), see THIRD-PARTY-NOTICES.md.
     this.pluginNoticeComponent.showNotice(formatReloadSummary({ directoryPath, summary }));
   }
 
   private async reloadFolderImpl(params: FileExplorerReloaderReloadFolderImplParams): Promise<void> {
-    const { directoryPath, isRecursive, summary } = params;
+    const { ancestorRealPaths, directoryPath, isRecursive, summary } = params;
     const directory = this.app.vault.getAbstractFileByPath(directoryPath);
 
     if (!(directory instanceof TFolder)) {
@@ -143,15 +155,37 @@ export class FileExplorerReloader {
       summary.modified++;
     }
 
-    if (isRecursive) {
-      for (const existingFileItem of existingFileItems) {
-        if (!existingFileItem.isDirectory()) {
+    if (!isRecursive) {
+      return;
+    }
+
+    const realPath = await fileSystemAdapter.fsPromises.realpath(absolutePath);
+    const nextAncestorRealPaths = new Set(ancestorRealPaths).add(realPath);
+
+    for (const existingFileItem of existingFileItems) {
+      const absoluteChildPath = `${absolutePath}/${existingFileItem.name}`;
+      if (!await isDirectoryEntry({ absolutePath: absoluteChildPath, entry: existingFileItem, fileSystemAdapter })) {
+        continue;
+      }
+
+      const path = combinePath({ directoryPath, fileName: existingFileItem.name });
+
+      if (!existingFileItem.isDirectory()) {
+        // A symlink or a Windows junction to a folder: `Dirent.isDirectory()` is false for it, so it is followed here.
+        // A link back to one of its own ancestors would recurse forever, so it is compared by real path and skipped.
+        const childRealPath = await fileSystemAdapter.fsPromises.realpath(absoluteChildPath);
+        if (nextAncestorRealPaths.has(childRealPath)) {
+          this.consoleDebugComponent.consoleDebug(`Skipping ${path}: it links back to one of its own parent folders`);
           continue;
         }
 
-        const path = combinePath({ directoryPath, fileName: existingFileItem.name });
-        await this.reloadFolderImpl({ directoryPath: path, isRecursive: true, summary });
+        if (!(this.app.vault.getAbstractFileByPath(path) instanceof TFolder)) {
+          this.consoleDebugComponent.consoleDebug(`Skipping ${path}: Obsidian does not show the linked folder`);
+          continue;
+        }
       }
+
+      await this.reloadFolderImpl({ ancestorRealPaths: nextAncestorRealPaths, directoryPath: path, isRecursive: true, summary });
     }
   }
 }
@@ -183,4 +217,23 @@ function formatReloadSummary(params: FormatReloadSummaryParams): string {
   return parts.length === 0
     ? `${target} is already up to date.`
     : `${target} reloaded: ${parts.join(', ')}.`;
+}
+
+async function isDirectoryEntry(params: IsDirectoryEntryParams): Promise<boolean> {
+  const { absolutePath, entry, fileSystemAdapter } = params;
+  if (entry.isDirectory()) {
+    return true;
+  }
+
+  if (!entry.isSymbolicLink()) {
+    return false;
+  }
+
+  try {
+    const stat = await fileSystemAdapter.fsPromises.stat(absolutePath);
+    return stat.isDirectory();
+  } catch {
+    // A dangling link has no target to reload.
+    return false;
+  }
 }

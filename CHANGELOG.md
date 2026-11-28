@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.5.0
+
+This release has 3 new features, 1 fix and 3 documentation changes. 3 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.
+
+### New
+
+- add a reload button to the file explorer header
+- show a notice that sums up what a reload changed
+- refresh files whose content changed on disk (ported from SMB Rescan)
+
+### Fixed
+
+- follow folder symlinks and junctions when reloading with subfolders
+
+### Documentation
+
+- say `External Rename Handler` already keeps the pane up with a burst of outside changes
+- refresh the See also comparison with the plugins found on 2026-11-20
+- switch the README badge line to the plugin set
+
 ## 1.4.1
 
 This release has 1 fix and 3 documentation changes. 2 maintenance commits (tests, build, CI, refactoring, dependencies) are not listed.

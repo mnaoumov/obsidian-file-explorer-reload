@@ -6,6 +6,8 @@ Copy, move or delete files outside [Obsidian](https://obsidian.md/) while it is 
 
 The usual remedy is **Reload app without saving**, which discards your whole session to refresh one pane and is slow on a large vault. This plugin refreshes only the files: the entire pane, a single folder, or a folder and everything beneath it.
 
+The pane falls behind mostly on a burst of outside changes, such as a sync client or a script touching many files at once: on Windows, Obsidian's own file watcher can drop part of such a burst. [`External Rename Handler`](https://community.obsidian.md/plugins/external-rename-handler) replaces that watcher with one that rescans the folder, so with it installed the pane already keeps up with a burst on a local disk. This plugin is then mostly for vaults without it, for paths no watcher sees (symlinked folders, network shares), and for a manual reload on demand.
+
 <!-- markdownlint-disable MD033 -->
 
 <a href="https://github.com/mnaoumov/obsidian-file-explorer-reload/blob/HEAD/images/screenshots/screenshot-desktop-1.png"><img src="images/screenshots/screenshot-desktop-1.png" alt="Reload the whole file explorer from the command palette" width="600"></a>
@@ -49,7 +51,7 @@ The one setting, **Show reload button**, hides that header button.
 | Plugin | Features | How `File Explorer Reload` differs |
 | --- | --- | --- |
 | [`Auto Refresh Explorer`](https://community.obsidian.md/plugins/auto-refresh-explorer) | Polls a configured list of folders every few seconds; adds newly synced files; desktop and mobile | Same goal, other trigger: reloads only on request, but any folder or the whole vault; also removes files gone from disk |
-| [`External Rename Handler`](https://community.obsidian.md/plugins/external-rename-handler) (my plugin) | Treats a rename made outside Obsidian as a rename, not a delete and a create | Complements it: reconciles files added or removed outside Obsidian; does not pair them into renames |
+| [`External Rename Handler`](https://community.obsidian.md/plugins/external-rename-handler) (my plugin) | Treats a rename made outside Obsidian as a rename, not a delete and a create; replaces Obsidian's file watcher with one that also catches a burst of outside changes on a local disk | Overlaps it: with it installed, the pane already keeps up on a local disk, so this plugin is for paths no watcher sees (symlinked folders, network shares) and a reload on demand; does not pair changes into renames |
 | [`Rebuild Vault Index`](https://community.obsidian.md/plugins/rebuild-vault-index) | Sidebar pane; reveals hidden folders; reindexes the metadata cache; reloads community plugins | Narrower than it: refreshes the file list only; leaves hidden folders hidden |
 | [`Reload Current File`](https://community.obsidian.md/plugins/reload-current-file) | Reloads the open note when its file changes on disk; keeps cursor and scroll; automatic or by command | Wider, on request only: re-reads every changed file in the reloaded folders, open or not, and also adds and removes files; does not keep the cursor |
 | [`SMB Rescan`](https://github.com/DanielDocekal/obsidian-smb-rescan) | Unlisted; rescans the vault every 60 seconds, on window focus and on demand; adds and removes files; reloads changed open notes | Same goal, other trigger: reloads only on request; one folder, shallow or recursive, or the whole vault |
